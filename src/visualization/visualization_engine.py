@@ -8,48 +8,123 @@ import logging
 from datetime import datetime
 import matplotlib
 from pathlib import Path
+import matplotlib.font_manager as fm
+
+# 폰트 매니저 캐시 초기화 코드 추가
+def reset_font_cache():
+    """폰트 캐시를 재구성합니다."""
+    try:
+        # 최신 버전의 matplotlib에서는 fontManager.json_dump() 호출 후 재생성
+        fm.fontManager.json_dump()
+        logging.info("폰트 캐시를 재구성했습니다. (json_dump 메서드 사용)")
+        return True
+    except Exception as e1:
+        try:
+            # 구버전 matplotlib에서는 _rebuild() 메서드 사용
+            if hasattr(fm, '_rebuild'):
+                fm._rebuild()
+                logging.info("폰트 캐시를 재구성했습니다. (_rebuild 메서드 사용)")
+                return True
+            else:
+                # 캐시 재구성이 불가능한 경우
+                logging.warning(f"폰트 캐시 재구성 방법을 찾을 수 없습니다: {str(e1)}")
+                
+                # 대안으로 fontManager 인스턴스 재생성 시도
+                try:
+                    fm.fontManager = fm.FontManager()
+                    logging.info("폰트 매니저 인스턴스를 재생성했습니다.")
+                    return True
+                except Exception as e2:
+                    logging.warning(f"폰트 매니저 재생성 실패: {str(e2)}")
+        except Exception as e3:
+            logging.warning(f"폰트 캐시 재구성 중 오류 발생: {str(e3)}")
+    
+    # 캐시 재구성을 건너뛰고 계속 진행
+    return False
 
 # 한글 폰트 설정 추가
 def configure_korean_font():
     """한글 폰트 설정을 구성합니다."""
     import platform
     
+    # 폰트 캐시 초기화 (실패하더라도 계속 진행)
+    try:
+        reset_font_cache()
+    except Exception as e:
+        logging.warning(f"폰트 캐시 재구성 중 오류 발생, 계속 진행합니다: {str(e)}")
+    
     # Windows 환경인 경우
     if platform.system() == 'Windows':
         try:
             # 폰트 직접 등록 방식
-            import matplotlib.font_manager as fm
+            # 모든 사용 가능한 폰트 확인 (디버깅용)
+            try:
+                font_list = [f.name for f in fm.fontManager.ttflist]
+                logging.info(f"사용 가능한 폰트 목록 (일부): {font_list[:10]}")
+            except Exception as e:
+                logging.warning(f"폰트 목록 조회 중 오류: {str(e)}")
             
-            # 윈도우 폰트 경로
-            font_path = r'C:\Windows\Fonts\malgun.ttf'  # 맑은 고딕 폰트
+            # 여러 한글 폰트 경로 시도
+            font_paths = [
+                r'C:\Users\ffgtt\AppData\Local\Microsoft\Windows\Fonts\현대하모니+B.ttf',  # 현대하모니 B 폰트
+                r'C:\Users\ffgtt\AppData\Local\Microsoft\Windows\Fonts\현대하모니+M.ttf',  # 현대하모니 M 폰트
+                r'C:\Users\ffgtt\AppData\Local\Microsoft\Windows\Fonts\현대하모니+L.ttf',  # 현대하모니 L 폰트
+                r'C:\Windows\Fonts\NotoSansKR-VF.ttf',  # Noto Sans KR 가변 폰트
+                r'C:\Windows\Fonts\malgun.ttf',         # 맑은 고딕
+                r'C:\Windows\Fonts\HANBatang.ttf',      # 한 바탕
+                r'C:\Windows\Fonts\HANDotum.ttf'        # 한 돋움
+            ]
             
-            # 폰트 속성 가져오기
-            font_prop = fm.FontProperties(fname=font_path)
+            font_found = False
+            for font_path in font_paths:
+                if os.path.exists(font_path):
+                    logging.info(f"폰트 파일 확인됨: {font_path}")
+                    
+                    # 폰트 속성 가져오기
+                    font_prop = fm.FontProperties(fname=font_path)
+                    
+                    # 폰트 이름 가져오기
+                    font_name = font_prop.get_name()
+                    
+                    # 폰트 패밀리에 한글 폰트를 추가하는 방식으로 변경
+                    plt.rcParams['font.family'] = 'sans-serif'
+                    if 'font.sans-serif' in plt.rcParams:
+                        plt.rcParams['font.sans-serif'] = [font_name] + plt.rcParams['font.sans-serif']
+                    else:
+                        plt.rcParams['font.sans-serif'] = [font_name]
+                    plt.rcParams['axes.unicode_minus'] = False  # 마이너스 기호 깨짐 방지
+                    
+                    logging.info(f"한글 폰트 '{font_name}' 등록 완료")
+                    font_found = True
+                    break
             
-            # 폰트 이름 가져오기
-            font_name = font_prop.get_name()
-            
-            # Matplotlib 설정
-            matplotlib.rc('font', family=font_name)
-            matplotlib.rcParams['axes.unicode_minus'] = False  # 마이너스 기호 깨짐 방지
-            
-            logging.info(f"한글 폰트 '{font_name}' 등록 완료")
-            return True
+            if not font_found:
+                raise Exception("유효한 한글 폰트 파일을 찾을 수 없습니다.")
+                
+            return font_found
         except Exception as e:
             # 기본 폰트 방식으로 시도
             font_names = [
-                'Malgun Gothic',  # 맑은 고딕
-                'Gulim',          # 굴림
-                'Batang',         # 바탕
-                'Gungsuh'         # 궁서
+                '현대하모니 B',   # 현대하모니 B
+                '현대하모니 M',   # 현대하모니 M
+                '현대하모니 L',   # 현대하모니 L
+                'Noto Sans KR',  # 노토 산스 KR
+                'Malgun Gothic', # 맑은 고딕
+                'Gulim',         # 굴림
+                'Batang',        # 바탕
+                'Gungsuh'        # 궁서
             ]
             
             # 사용 가능한 폰트 찾기
             font_found = False
             for font_name in font_names:
                 try:
-                    matplotlib.rc('font', family=font_name)
-                    matplotlib.rcParams['axes.unicode_minus'] = False  # 마이너스 기호 깨짐 방지
+                    plt.rcParams['font.family'] = 'sans-serif'
+                    if 'font.sans-serif' in plt.rcParams:
+                        plt.rcParams['font.sans-serif'] = [font_name] + plt.rcParams['font.sans-serif']
+                    else:
+                        plt.rcParams['font.sans-serif'] = [font_name]
+                    plt.rcParams['axes.unicode_minus'] = False  # 마이너스 기호 깨짐 방지
                     font_found = True
                     logging.info(f"한글 폰트 '{font_name}'을(를) 사용합니다.")
                     break
@@ -64,12 +139,13 @@ def configure_korean_font():
     # macOS 환경인 경우
     elif platform.system() == 'Darwin':
         try:
-            matplotlib.rc('font', family='AppleGothic')
-            matplotlib.rcParams['axes.unicode_minus'] = False
+            plt.rcParams['font.family'] = 'AppleGothic'
+            plt.rcParams['axes.unicode_minus'] = False
             logging.info("한글 폰트 'AppleGothic'을(를) 사용합니다.")
+            return True
         except:
             logging.warning("macOS 한글 폰트를 찾을 수 없습니다. 텍스트가 깨질 수 있습니다.")
-            
+            return False
     # Linux 환경인 경우
     else:
         font_names = [
@@ -82,8 +158,12 @@ def configure_korean_font():
         font_found = False
         for font_name in font_names:
             try:
-                matplotlib.rc('font', family=font_name)
-                matplotlib.rcParams['axes.unicode_minus'] = False
+                plt.rcParams['font.family'] = 'sans-serif'
+                if 'font.sans-serif' in plt.rcParams:
+                    plt.rcParams['font.sans-serif'] = [font_name] + plt.rcParams['font.sans-serif']
+                else:
+                    plt.rcParams['font.sans-serif'] = [font_name]
+                plt.rcParams['axes.unicode_minus'] = False
                 font_found = True
                 logging.info(f"한글 폰트 '{font_name}'을(를) 사용합니다.")
                 break
@@ -92,6 +172,9 @@ def configure_korean_font():
                 
         if not font_found:
             logging.warning("기본 한글 폰트를 찾을 수 없습니다. 텍스트가 깨질 수 있습니다.")
+            return False
+        
+        return font_found
 
 # 클래스 시작 전에 폰트 설정 호출
 configure_korean_font()
@@ -120,34 +203,43 @@ class VisualizationEngine:
         # 출력 디렉토리 생성
         os.makedirs(output_dir, exist_ok=True)
         
-        # 한글 폰트 설정 확인
-        import matplotlib.font_manager as fm
-        import platform
+        # 한글 폰트 설정 재적용 (중요: 각 인스턴스 생성 시마다 적용)
+        configure_korean_font()
         
-        # 현재 설정된 폰트 확인
-        current_font = matplotlib.rcParams['font.family']
-        self.logger.info(f"현재 설정된 폰트: {current_font}")
-        
-        # 시스템에 설치된 폰트 확인
-        if platform.system() == 'Windows':
-            # 맑은 고딕 폰트 경로
-            font_path = r'C:\Windows\Fonts\malgun.ttf'
+        # 현재 설정된 폰트 확인 (디버깅용)
+        self.logger.info(f"폰트 패밀리: {plt.rcParams['font.family']}")
+        if 'font.sans-serif' in plt.rcParams:
+            self.logger.info(f"sans-serif 폰트: {plt.rcParams['font.sans-serif']}")
             
-            # 폰트 경로 확인
-            if os.path.exists(font_path):
-                self.logger.info(f"맑은 고딕 폰트 파일 확인됨: {font_path}")
-                
-                # 폰트 직접 등록
-                font_prop = fm.FontProperties(fname=font_path)
-                font_name = font_prop.get_name()
-                
-                matplotlib.rc('font', family=font_name)
-                matplotlib.rcParams['axes.unicode_minus'] = False
-                
-                self.logger.info(f"한글 폰트 '{font_name}' 수동 등록 완료")
-            else:
-                self.logger.warning("맑은 고딕 폰트 파일을 찾을 수 없습니다. 폰트 경로를 확인하세요.")
+        # 폰트 속성 객체 생성 (B 스타일 사용)
+        self.korean_font_paths = {
+            'B': r'C:\Users\ffgtt\AppData\Local\Microsoft\Windows\Fonts\현대하모니+B.ttf',  # 현대하모니 B 폰트
+            'M': r'C:\Users\ffgtt\AppData\Local\Microsoft\Windows\Fonts\현대하모니+M.ttf',  # 현대하모니 M 폰트
+            'L': r'C:\Users\ffgtt\AppData\Local\Microsoft\Windows\Fonts\현대하모니+L.ttf'   # 현대하모니 L 폰트
+        }
         
+        # 폰트 속성 객체 미리 생성
+        self.font_props = {}
+        for style, path in self.korean_font_paths.items():
+            if os.path.exists(path):
+                try:
+                    self.font_props[style] = fm.FontProperties(fname=path)
+                    self.logger.info(f"'{style}' 스타일 폰트 속성 객체 생성 성공")
+                except Exception as e:
+                    self.logger.warning(f"폰트 속성 객체 생성 실패 ({style}): {str(e)}")
+    
+    # 폰트 스타일 문자열로 FontProperties 객체 반환하는 헬퍼 메서드
+    def get_font_prop(self, style='B'):
+        """폰트 속성 객체 반환 (기본값: B 스타일)"""
+        if style in self.font_props:
+            return self.font_props[style]
+        elif 'B' in self.font_props:
+            return self.font_props['B']  # 기본 대체 스타일
+        elif len(self.font_props) > 0:
+            return list(self.font_props.values())[0]  # 첫 번째 사용 가능한 폰트
+        else:
+            return None  # 사용 가능한 폰트 없음
+    
     def generate_visualizations(self, df: pd.DataFrame, analysis_results: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
         분석 결과를 기반으로 주요 시각화 생성
@@ -159,6 +251,9 @@ class VisualizationEngine:
         Returns:
             List[Dict[str, Any]]: 생성된 시각화 정보 목록
         """
+        # 한글 폰트 설정 확인 (각 그래프 생성 전에 확인)
+        configure_korean_font()
+        
         self.logger.info("주요 시각화 생성 시작")
         self.set_dataframe(df)
         
@@ -342,27 +437,28 @@ class VisualizationEngine:
         
     def _save_figure(self, filename: Optional[str] = None, tight_layout: bool = True) -> str:
         """
-        현재 그림 저장
+        현재 그림을 파일로 저장
         
         Args:
-            filename (str, optional): 저장할 파일명. None인 경우 자동 생성
+            filename (str, optional): 저장할 파일 이름
             tight_layout (bool): tight_layout 적용 여부
             
         Returns:
             str: 저장된 파일 경로
         """
         if self.current_figure is None:
-            self.logger.warning("저장할 그림이 없습니다.")
             return ""
-            
-        if filename is None:
-            filename = self._get_filename("figure")
-            
-        file_path = os.path.join(self.output_dir, filename)
         
         if tight_layout:
             plt.tight_layout()
+        
+        if filename is None:
+            filename = self._get_filename("plot")
             
+        # 파일 경로 생성 시 안전한 경로 처리 추가
+        safe_filename = filename.replace('/', '_').replace('\\', '_')
+        file_path = os.path.join(self.output_dir, safe_filename)
+        
         try:
             plt.savefig(file_path, dpi=self.dpi, bbox_inches='tight')
             self.logger.info(f"그림 저장 완료: {file_path}")
@@ -388,18 +484,21 @@ class VisualizationEngine:
     def plot_histogram(self, column: str, bins: int = 20, kde: bool = True, 
                       title: Optional[str] = None, filename: Optional[str] = None) -> str:
         """
-        히스토그램 플롯 생성
+        지정한 열의 히스토그램 생성
         
         Args:
-            column (str): 데이터 열 이름
-            bins (int): 히스토그램 구간 수
-            kde (bool): 커널 밀도 추정 곡선 표시 여부
+            column (str): 히스토그램을 생성할 열 이름
+            bins (int): 구간 수
+            kde (bool): 커널 밀도 추정 표시 여부
             title (str, optional): 그래프 제목
-            filename (str, optional): 저장할 파일명
+            filename (str, optional): 저장할 파일 이름
             
         Returns:
             str: 저장된 파일 경로
         """
+        # 한글 폰트 설정 확인 (각 그래프 생성 전에 확인)
+        configure_korean_font()
+        
         if self.df is None:
             self.logger.error("데이터프레임이 설정되지 않았습니다.")
             return ""
@@ -433,15 +532,22 @@ class VisualizationEngine:
             # 히스토그램 그리기
             sns.histplot(data=data, kde=kde, bins=bins)
             
-            # 그래프 설정
+            # 폰트 속성 가져오기
+            font_prop = self.get_font_prop('B')
+            
+            # 그래프 설정 - 직접 폰트 지정
             if title:
-                plt.title(title)
+                plt.title(title, fontproperties=font_prop, fontsize=14)
             else:
-                plt.title(f"Distribution of {column}")
+                plt.title(f"Distribution of {column}", fontproperties=font_prop, fontsize=14)
                 
-            plt.xlabel(column)
-            plt.ylabel("Frequency")
+            plt.xlabel(column, fontproperties=font_prop, fontsize=12)
+            plt.ylabel("Frequency", fontproperties=font_prop, fontsize=12)
             plt.grid(True, alpha=0.3)
+            
+            # 눈금 레이블에도 폰트 적용
+            plt.xticks(fontproperties=font_prop, fontsize=10)
+            plt.yticks(fontproperties=font_prop, fontsize=10)
             
             # 현재 그림 저장
             self.current_figure = plt.gcf()
@@ -463,18 +569,21 @@ class VisualizationEngine:
     def plot_bar(self, column: str, horizontal: bool = False, top_n: int = 10,
                 title: Optional[str] = None, filename: Optional[str] = None) -> str:
         """
-        막대 그래프 플롯 생성
+        지정한 열의 막대 그래프 생성
         
         Args:
-            column (str): 데이터 열 이름
-            horizontal (bool): 가로 막대 그래프 사용 여부
-            top_n (int): 표시할 상위 범주 수
+            column (str): 막대 그래프를 생성할 열 이름
+            horizontal (bool): 수평 막대 그래프 여부
+            top_n (int): 표시할 최대 항목 수
             title (str, optional): 그래프 제목
-            filename (str, optional): 저장할 파일명
+            filename (str, optional): 저장할 파일 이름
             
         Returns:
             str: 저장된 파일 경로
         """
+        # 한글 폰트 설정 확인 (각 그래프 생성 전에 확인)
+        configure_korean_font()
+        
         if self.df is None:
             self.logger.error("데이터프레임이 설정되지 않았습니다.")
             return ""
@@ -501,35 +610,43 @@ class VisualizationEngine:
             # 그림 생성
             plt.figure(figsize=self.figure_size)
             
+            # 폰트 속성 가져오기
+            font_prop = self.get_font_prop('B')
+            
             # 막대 그래프 그리기 (가로/세로)
             if horizontal:
                 ax = sns.barplot(y=value_counts.index, x=value_counts.values)
                 
                 # 값 레이블 추가
                 for i, v in enumerate(value_counts.values):
-                    ax.text(v + 0.1, i, str(v), va='center')
+                    ax.text(v + 0.1, i, str(v), va='center', fontproperties=font_prop)
                     
-                plt.xlabel("Count")
-                plt.ylabel(column)
+                plt.xlabel("Count", fontproperties=font_prop, fontsize=12)
+                plt.ylabel(column, fontproperties=font_prop, fontsize=12)
             else:
                 ax = sns.barplot(x=value_counts.index, y=value_counts.values)
                 
                 # 값 레이블 추가
                 for i, v in enumerate(value_counts.values):
-                    ax.text(i, v + 0.1, str(v), ha='center')
+                    ax.text(i, v + 0.1, str(v), ha='center', fontproperties=font_prop)
                     
-                plt.xlabel(column)
-                plt.ylabel("Count")
+                plt.xlabel(column, fontproperties=font_prop, fontsize=12)
+                plt.ylabel("Count", fontproperties=font_prop, fontsize=12)
                 
                 # 긴 레이블 회전
                 if max([len(str(x)) for x in value_counts.index]) > 10:
-                    plt.xticks(rotation=45, ha='right')
+                    plt.xticks(rotation=45, ha='right', fontproperties=font_prop, fontsize=10)
+                else:
+                    plt.xticks(fontproperties=font_prop, fontsize=10)
+                
+            # y축 레이블 폰트 설정
+            plt.yticks(fontproperties=font_prop, fontsize=10)
                 
             # 그래프 설정
             if title:
-                plt.title(title)
+                plt.title(title, fontproperties=font_prop, fontsize=14)
             else:
-                plt.title(f"Frequency of {column}")
+                plt.title(f"Frequency of {column}", fontproperties=font_prop, fontsize=14)
                 
             plt.grid(True, alpha=0.3)
             
@@ -554,18 +671,21 @@ class VisualizationEngine:
     def plot_scatter(self, x_column: str, y_column: str, hue_column: Optional[str] = None,
                     title: Optional[str] = None, filename: Optional[str] = None) -> str:
         """
-        산점도 플롯 생성
+        두 열 간의 산점도 생성
         
         Args:
-            x_column (str): X축 데이터 열 이름
-            y_column (str): Y축 데이터 열 이름
-            hue_column (str, optional): 색상 구분에 사용할 열 이름
+            x_column (str): x축 데이터 열 이름
+            y_column (str): y축 데이터 열 이름
+            hue_column (str, optional): 색상 구분을 위한 열 이름
             title (str, optional): 그래프 제목
-            filename (str, optional): 저장할 파일명
+            filename (str, optional): 저장할 파일 이름
             
         Returns:
             str: 저장된 파일 경로
         """
+        # 한글 폰트 설정 확인 (각 그래프 생성 전에 확인)
+        configure_korean_font()
+        
         if self.df is None:
             self.logger.error("데이터프레임이 설정되지 않았습니다.")
             return ""
@@ -649,18 +769,21 @@ class VisualizationEngine:
     def plot_boxplot(self, column: str, by: Optional[str] = None, horizontal: bool = False,
                     title: Optional[str] = None, filename: Optional[str] = None) -> str:
         """
-        박스플롯 생성
+        지정한 열의 박스플롯 생성
         
         Args:
-            column (str): 데이터 열 이름
-            by (str, optional): 그룹화 기준 열 이름
-            horizontal (bool): 가로 박스플롯 사용 여부
+            column (str): 박스플롯을 생성할 열 이름
+            by (str, optional): 그룹화할 열 이름
+            horizontal (bool): 수평 박스플롯 여부
             title (str, optional): 그래프 제목
-            filename (str, optional): 저장할 파일명
+            filename (str, optional): 저장할 파일 이름
             
         Returns:
             str: 저장된 파일 경로
         """
+        # 한글 폰트 설정 확인 (각 그래프 생성 전에 확인)
+        configure_korean_font()
+        
         if self.df is None:
             self.logger.error("데이터프레임이 설정되지 않았습니다.")
             return ""
@@ -915,16 +1038,27 @@ class VisualizationEngine:
             # 그림 생성
             plt.figure(figsize=figsize)
             
+            # 폰트 속성 가져오기
+            font_prop = self.get_font_prop('B')
+            
             # 히트맵 그리기
             mask = np.triu(np.ones_like(corr_matrix, dtype=bool))  # 상단 삼각형 마스킹
-            sns.heatmap(corr_matrix, annot=True, fmt=".2f", cmap='coolwarm', center=0,
+            heatmap = sns.heatmap(corr_matrix, annot=True, fmt=".2f", cmap='coolwarm', center=0,
                        mask=mask, square=True, linewidths=.5, cbar_kws={"shrink": .5})
+            
+            # 히트맵 주석(annotation) 폰트 설정
+            for text in heatmap.texts:
+                text.set_fontproperties(font_prop)
+                
+            # x축과 y축 레이블 폰트 설정
+            plt.xticks(fontproperties=font_prop, fontsize=10)
+            plt.yticks(fontproperties=font_prop, fontsize=10)
                        
             # 그래프 설정
             if title:
-                plt.title(title)
+                plt.title(title, fontproperties=font_prop, fontsize=14)
             else:
-                plt.title(f"Correlation Heatmap ({method})")
+                plt.title(f"Correlation Heatmap ({method})", fontproperties=font_prop, fontsize=14)
                 
             # 현재 그림 저장
             self.current_figure = plt.gcf()
