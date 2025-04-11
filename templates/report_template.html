@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <style>
+        body {
+            font-family: 'Nanum Gothic', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+            margin-top: 1.5em;
+        }
+        
+        h1 {
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        
+        h2 {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+        
+        .author {
+            text-align: right;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #f5f5f5;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        td {
+            padding: 8px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .visualization {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .visualization img {
+            max-width: 100%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .summary {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.9em;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+        
+        .toc {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        .toc ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        
+        .toc li {
+            margin-bottom: 5px;
+        }
+        
+        .correlation-positive {
+            background-color: #ffcccc;
+        }
+        
+        .correlation-negative {
+            background-color: #ccccff;
+        }
+        
+        @media print {
+            body {
+                max-width: 100%;
+                padding: 0;
+            }
+            
+            .visualization img {
+                max-width: 80%;
+            }
+            
+            @page {
+                margin: 2cm;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>{{title}}</h1>
+        <div class="subtitle">{{subtitle}}</div>
+        {% if author %}
+        <div class="author">작성자: {{author}}</div>
+        {% endif %}
+    </header>
+    
+    {% if toc %}
+    <div class="toc">
+        <h2>목차</h2>
+        <ul>
+            {% for section in toc %}
+            <li><a href="#{{section.id}}">{{section.title}}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    
+    <div class="content">
+        {{content}}
+    </div>
+    
+    <footer class="footer">
+        <p>이 보고서는 엑셀 데이터 분석 시스템에 의해 생성되었습니다.</p>
+        <p>생성일: {{generation_date}}</p>
+    </footer>
+</body>
+</html> 

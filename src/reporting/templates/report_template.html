@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: #3498db;
+            margin-top: 30px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        h3 {
+            color: #2c3e50;
+        }
+        .meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .visualization {
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .visualization img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .viz-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .viz-description {
+            color: #666;
+            font-style: italic;
+        }
+        .summary-item {
+            margin-bottom: 15px;
+        }
+        footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        .category-section {
+            margin-bottom: 30px;
+        }
+        @media print {
+            body {
+                background-color: white;
+            }
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>{{ title }}</h1>
+            {% if subtitle %}
+                <h2>{{ subtitle }}</h2>
+            {% endif %}
+            <div class="meta">
+                {% if author %}
+                    <p>작성자: {{ author }}</p>
+                {% endif %}
+                <p>생성 일시: {{ creation_date }}</p>
+            </div>
+        </header>
+
+        <div class="section">
+            <h2>데이터 요약</h2>
+            {% for name, stats in summary_stats.items() %}
+                <div class="summary-item">
+                    <h3>데이터셋: {{ name }}</h3>
+                    {% if stats.shape %}
+                        <p>크기: {{ stats.shape[0] }}행 x {{ stats.shape[1] }}열</p>
+                    {% endif %}
+                    
+                    {% if stats.columns %}
+                        <p>열 목록: {{ stats.columns|join(', ') }}</p>
+                    {% endif %}
+                    
+                    {% if stats.na_counts %}
+                        <h4>결측치</h4>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>열</th>
+                                        <th>결측치 수</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for col, count in stats.na_counts.items() %}
+                                        {% if count > 0 %}
+                                            <tr>
+                                                <td>{{ col }}</td>
+                                                <td>{{ count }}</td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if visualizations %}
+            <div class="section">
+                <h2>데이터 시각화</h2>
+                
+                {% set categories = {} %}
+                {% for viz in visualizations %}
+                    {% if viz.category not in categories %}
+                        {% set _ = categories.update({viz.category: []}) %}
+                    {% endif %}
+                    {% set _ = categories[viz.category].append(viz) %}
+                {% endfor %}
+                
+                {% for category, items in categories.items() %}
+                    <div class="category-section">
+                        <h3>{{ category|capitalize }}</h3>
+                        {% for viz in items %}
+                            <div class="visualization">
+                                <div class="viz-title">{{ viz.title or viz.filename }}</div>
+                                <img src="{{ viz.file_path }}" alt="{{ viz.title or viz.filename }}">
+                                {% if viz.description %}
+                                    <div class="viz-description">{{ viz.description }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if data_tables %}
+            <div class="section">
+                <h2>데이터 미리보기</h2>
+                {% for name, table in data_tables.items() %}
+                    <h3>{{ name }}</h3>
+                    <div class="table-container">
+                        {{ table|safe }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <footer>
+            <p>이 보고서는 Excel 분석 시스템에 의해 자동 생성되었습니다.</p>
+            <p>© {{ creation_date[:4] }} Excel 분석 시스템</p>
+        </footer>
+    </div>
+</body>
+</html> 

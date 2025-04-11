@@ -1,0 +1,255 @@
+﻿python : 2025-04-11 01:46:02,548 - matplotlib - DEBUG - matplotlib data path: C:\Users\ffgtt\AppData
+\Roaming\Python\Python313\site-packages\matplotlib\mpl-data
+위치 줄:1 문자:1
++ python -m src.test.test_analysis_view 2>&1 | Out-File -Encoding utf8  ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (2025-04-11 01:4...lotlib\mpl-data:String) [], RemoteEx 
+   ception
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+2025-04-11 01:46:02,552 - matplotlib - DEBUG - CONFIGDIR=C:\Users\ffgtt\.matplotlib
+2025-04-11 01:46:02,553 - matplotlib - DEBUG - interactive is False
+2025-04-11 01:46:02,553 - matplotlib - DEBUG - platform is win32
+2025-04-11 01:46:02,607 - matplotlib - DEBUG - CACHEDIR=C:\Users\ffgtt\.matplotlib
+2025-04-11 01:46:02,609 - matplotlib.font_manager - DEBUG - Using fontManager instance from C:\Users
+\ffgtt\.matplotlib\fontlist-v390.json
+2025-04-11 01:46:03,427 - root - INFO - 한글 폰트 'Malgun Gothic'을(를) 사용합니다.
+2025-04-11 01:46:03,784 - __main__ - INFO - 샘플 데이터 생성됨: (100, 5)
+2025-04-11 01:46:03,784 - __main__ - INFO - 데이터 열: ['나이', '소득', '교육연수', '경력연수', '만족도']
+2025-04-11 01:46:03,785 - src.core.analysis_engine - INFO - 데이터프레임 설정됨: 행=100, 열=5
+2025-04-11 01:46:03,785 - src.core.analysis_engine - INFO - 데이터 분석 시작: 100 행, 5 열
+2025-04-11 01:46:03,786 - src.core.analysis_engine - INFO - 데이터 분석 완료
+2025-04-11 01:46:03,786 - src.gui.analysis_view - DEBUG - 결과 하위 항목 추가: categorical_columns, 데이터 경로: 
+basic_stats.categorical_columns
+2025-04-11 01:46:03,786 - src.gui.analysis_view - DEBUG - 결과 하위 항목 추가: column_names, 데이터 경로: basic_s
+tats.column_names
+2025-04-11 01:46:03,786 - src.gui.analysis_view - DEBUG - 결과 하위 항목 추가: columns, 데이터 경로: basic_stats.
+columns
+2025-04-11 01:46:03,786 - src.gui.analysis_view - DEBUG - 결과 하위 항목 추가: missing_values, 데이터 경로: basic
+_stats.missing_values
+2025-04-11 01:46:03,787 - src.gui.analysis_view - DEBUG - 결과 하위 항목 추가: numeric_columns, 데이터 경로: basi
+c_stats.numeric_columns
+2025-04-11 01:46:03,787 - src.gui.analysis_view - DEBUG - 결과 하위 항목 추가: rows, 데이터 경로: basic_stats.row
+s
+2025-04-11 01:46:03,787 - src.gui.analysis_view - DEBUG - 결과 최상위 항목 추가: basic_stats
+2025-04-11 01:46:03,787 - src.gui.analysis_view - DEBUG - 결과 최상위 항목 추가: categorical_stats
+2025-04-11 01:46:03,787 - src.gui.analysis_view - DEBUG - 결과 최상위 항목 추가: correlation
+2025-04-11 01:46:03,790 - src.gui.analysis_view - INFO - 3개의 분석 결과가 로드되었습니다
+2025-04-11 01:46:03,880 - src.core.analysis_engine - INFO - 데이터 분석 시작: 100 행, 5 열
+2025-04-11 01:46:03,882 - src.core.analysis_engine - INFO - 데이터 분석 완료
+2025-04-11 01:46:03,882 - src.gui.analysis_view - DEBUG - 결과 하위 항목 추가: categorical_columns, 데이터 경로: 
+basic_stats.categorical_columns
+2025-04-11 01:46:03,882 - src.gui.analysis_view - DEBUG - 결과 하위 항목 추가: column_names, 데이터 경로: basic_s
+tats.column_names
+2025-04-11 01:46:03,882 - src.gui.analysis_view - DEBUG - 결과 하위 항목 추가: columns, 데이터 경로: basic_stats.
+columns
+2025-04-11 01:46:03,883 - src.gui.analysis_view - DEBUG - 결과 하위 항목 추가: missing_values, 데이터 경로: basic
+_stats.missing_values
+2025-04-11 01:46:03,883 - src.gui.analysis_view - DEBUG - 결과 하위 항목 추가: numeric_columns, 데이터 경로: basi
+c_stats.numeric_columns
+2025-04-11 01:46:03,883 - src.gui.analysis_view - DEBUG - 결과 하위 항목 추가: rows, 데이터 경로: basic_stats.row
+s
+2025-04-11 01:46:03,883 - src.gui.analysis_view - DEBUG - 결과 최상위 항목 추가: basic_stats
+2025-04-11 01:46:03,883 - src.gui.analysis_view - DEBUG - 결과 최상위 항목 추가: categorical_stats
+2025-04-11 01:46:03,883 - src.gui.analysis_view - DEBUG - 결과 최상위 항목 추가: correlation
+2025-04-11 01:46:03,883 - src.gui.analysis_view - INFO - 3개의 분석 결과가 로드되었습니다
+2025-04-11 01:46:03,883 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=0, 열=0
+2025-04-11 01:46:03,884 - src.gui.analysis_view - INFO - 클릭된 항목: basic_stats, 행: 0, 열: 0
+2025-04-11 01:46:03,884 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'dict'>
+2025-04-11 01:46:03,888 - src.gui.analysis_view - INFO - 클릭된 항목: basic_stats, 행: 0, 열: 0
+2025-04-11 01:46:03,888 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'dict'>
+2025-04-11 01:46:08,869 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=0, 열=0
+2025-04-11 01:46:08,869 - src.gui.analysis_view - INFO - 클릭된 항목: categorical_columns, 행: 0, 열: 0
+2025-04-11 01:46:08,869 - src.gui.analysis_view - WARNING - 선택한 항목에 데이터가 없습니다
+2025-04-11 01:46:08,995 - src.gui.analysis_view - INFO - 클릭된 항목: categorical_columns, 행: 0, 열: 0
+2025-04-11 01:46:08,995 - src.gui.analysis_view - WARNING - 선택한 항목에 데이터가 없습니다
+2025-04-11 01:46:09,375 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=2, 열=0
+2025-04-11 01:46:09,375 - src.gui.analysis_view - INFO - 클릭된 항목: columns, 행: 2, 열: 0
+2025-04-11 01:46:09,375 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'int'>
+2025-04-11 01:46:09,477 - src.gui.analysis_view - INFO - 클릭된 항목: columns, 행: 2, 열: 0
+2025-04-11 01:46:09,477 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'int'>
+2025-04-11 01:46:10,428 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=3, 열=0
+2025-04-11 01:46:10,428 - src.gui.analysis_view - INFO - 클릭된 항목: missing_values, 행: 3, 열: 0
+2025-04-11 01:46:10,428 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'dict'>
+2025-04-11 01:46:10,510 - src.gui.analysis_view - INFO - 클릭된 항목: missing_values, 행: 3, 열: 0
+2025-04-11 01:46:10,510 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'dict'>
+2025-04-11 01:46:11,155 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=4, 열=0
+2025-04-11 01:46:11,155 - src.gui.analysis_view - INFO - 클릭된 항목: numeric_columns, 행: 4, 열: 0
+2025-04-11 01:46:11,155 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'list'>
+2025-04-11 01:46:11,290 - src.gui.analysis_view - INFO - 클릭된 항목: numeric_columns, 행: 4, 열: 0
+2025-04-11 01:46:11,290 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'list'>
+2025-04-11 01:46:12,119 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=5, 열=0
+2025-04-11 01:46:12,119 - src.gui.analysis_view - INFO - 클릭된 항목: rows, 행: 5, 열: 0
+2025-04-11 01:46:12,120 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'int'>
+2025-04-11 01:46:12,215 - src.gui.analysis_view - INFO - 클릭된 항목: rows, 행: 5, 열: 0
+2025-04-11 01:46:12,215 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'int'>
+2025-04-11 01:46:12,880 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=4, 열=0
+2025-04-11 01:46:12,880 - src.gui.analysis_view - INFO - 클릭된 항목: numeric_columns, 행: 4, 열: 0
+2025-04-11 01:46:12,880 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'list'>
+2025-04-11 01:46:12,979 - src.gui.analysis_view - INFO - 클릭된 항목: numeric_columns, 행: 4, 열: 0
+2025-04-11 01:46:12,979 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'list'>
+2025-04-11 01:46:13,435 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=1, 열=0
+2025-04-11 01:46:13,435 - src.gui.analysis_view - INFO - 클릭된 항목: categorical_stats, 행: 1, 열: 0
+2025-04-11 01:46:13,435 - src.gui.analysis_view - WARNING - 선택한 항목에 데이터가 없습니다
+2025-04-11 01:46:13,533 - src.gui.analysis_view - INFO - 클릭된 항목: categorical_stats, 행: 1, 열: 0
+2025-04-11 01:46:13,533 - src.gui.analysis_view - WARNING - 선택한 항목에 데이터가 없습니다
+2025-04-11 01:46:14,074 - src.gui.analysis_view - INFO - 클릭된 항목: categorical_stats, 행: 1, 열: 0
+2025-04-11 01:46:14,074 - src.gui.analysis_view - WARNING - 선택한 항목에 데이터가 없습니다
+2025-04-11 01:46:14,620 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=1, 열=0
+2025-04-11 01:46:14,620 - src.gui.analysis_view - INFO - 클릭된 항목: column_names, 행: 1, 열: 0
+2025-04-11 01:46:14,620 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'list'>
+2025-04-11 01:46:14,726 - src.gui.analysis_view - INFO - 클릭된 항목: column_names, 행: 1, 열: 0
+2025-04-11 01:46:14,726 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'list'>
+2025-04-11 01:46:14,981 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=0, 열=0
+2025-04-11 01:46:14,981 - src.gui.analysis_view - INFO - 클릭된 항목: categorical_columns, 행: 0, 열: 0
+2025-04-11 01:46:14,981 - src.gui.analysis_view - WARNING - 선택한 항목에 데이터가 없습니다
+2025-04-11 01:46:15,086 - src.gui.analysis_view - INFO - 클릭된 항목: categorical_columns, 행: 0, 열: 0
+2025-04-11 01:46:15,086 - src.gui.analysis_view - WARNING - 선택한 항목에 데이터가 없습니다
+2025-04-11 01:46:15,378 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=2, 열=0
+2025-04-11 01:46:15,378 - src.gui.analysis_view - INFO - 클릭된 항목: columns, 행: 2, 열: 0
+2025-04-11 01:46:15,378 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'int'>
+2025-04-11 01:46:15,478 - src.gui.analysis_view - INFO - 클릭된 항목: columns, 행: 2, 열: 0
+2025-04-11 01:46:15,478 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'int'>
+2025-04-11 01:46:15,813 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=3, 열=0
+2025-04-11 01:46:15,813 - src.gui.analysis_view - INFO - 클릭된 항목: missing_values, 행: 3, 열: 0
+2025-04-11 01:46:15,813 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'dict'>
+2025-04-11 01:46:15,933 - src.gui.analysis_view - INFO - 클릭된 항목: missing_values, 행: 3, 열: 0
+2025-04-11 01:46:15,934 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'dict'>
+2025-04-11 01:46:16,428 - src.gui.analysis_view - INFO - 클릭된 항목: missing_values, 행: 3, 열: 0
+2025-04-11 01:46:16,428 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'dict'>
+2025-04-11 01:46:16,751 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=2, 열=0
+2025-04-11 01:46:16,751 - src.gui.analysis_view - INFO - 클릭된 항목: columns, 행: 2, 열: 0
+2025-04-11 01:46:16,751 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'int'>
+2025-04-11 01:46:16,863 - src.gui.analysis_view - INFO - 클릭된 항목: columns, 행: 2, 열: 0
+2025-04-11 01:46:16,863 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'int'>
+2025-04-11 01:46:17,127 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=0, 열=0
+2025-04-11 01:46:17,127 - src.gui.analysis_view - INFO - 클릭된 항목: categorical_columns, 행: 0, 열: 0
+2025-04-11 01:46:17,127 - src.gui.analysis_view - WARNING - 선택한 항목에 데이터가 없습니다
+2025-04-11 01:46:17,216 - src.gui.analysis_view - INFO - 클릭된 항목: categorical_columns, 행: 0, 열: 0
+2025-04-11 01:46:17,217 - src.gui.analysis_view - WARNING - 선택한 항목에 데이터가 없습니다
+2025-04-11 01:46:18,566 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=2, 열=0
+2025-04-11 01:46:18,567 - src.gui.analysis_view - INFO - 클릭된 항목: columns, 행: 2, 열: 0
+2025-04-11 01:46:18,567 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'int'>
+2025-04-11 01:46:18,701 - src.gui.analysis_view - INFO - 클릭된 항목: columns, 행: 2, 열: 0
+2025-04-11 01:46:18,702 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'int'>
+2025-04-11 01:46:19,638 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=3, 열=0
+2025-04-11 01:46:19,638 - src.gui.analysis_view - INFO - 클릭된 항목: missing_values, 행: 3, 열: 0
+2025-04-11 01:46:19,638 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'dict'>
+2025-04-11 01:46:19,788 - src.gui.analysis_view - INFO - 클릭된 항목: missing_values, 행: 3, 열: 0
+2025-04-11 01:46:19,788 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'dict'>
+2025-04-11 01:46:20,910 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=2, 열=0
+2025-04-11 01:46:20,910 - src.gui.analysis_view - INFO - 클릭된 항목: columns, 행: 2, 열: 0
+2025-04-11 01:46:20,910 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'int'>
+2025-04-11 01:46:21,029 - src.gui.analysis_view - INFO - 클릭된 항목: columns, 행: 2, 열: 0
+2025-04-11 01:46:21,029 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'int'>
+2025-04-11 01:46:21,409 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=1, 열=0
+2025-04-11 01:46:21,409 - src.gui.analysis_view - INFO - 클릭된 항목: column_names, 행: 1, 열: 0
+2025-04-11 01:46:21,409 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'list'>
+2025-04-11 01:46:21,507 - src.gui.analysis_view - INFO - 클릭된 항목: column_names, 행: 1, 열: 0
+2025-04-11 01:46:21,508 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'list'>
+2025-04-11 01:46:21,806 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=0, 열=0
+2025-04-11 01:46:21,806 - src.gui.analysis_view - INFO - 클릭된 항목: categorical_columns, 행: 0, 열: 0
+2025-04-11 01:46:21,806 - src.gui.analysis_view - WARNING - 선택한 항목에 데이터가 없습니다
+2025-04-11 01:46:21,918 - src.gui.analysis_view - INFO - 클릭된 항목: categorical_columns, 행: 0, 열: 0
+2025-04-11 01:46:21,918 - src.gui.analysis_view - WARNING - 선택한 항목에 데이터가 없습니다
+2025-04-11 01:46:22,473 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=1, 열=0
+2025-04-11 01:46:22,473 - src.gui.analysis_view - INFO - 클릭된 항목: column_names, 행: 1, 열: 0
+2025-04-11 01:46:22,473 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'list'>
+2025-04-11 01:46:22,578 - src.gui.analysis_view - INFO - 클릭된 항목: column_names, 행: 1, 열: 0
+2025-04-11 01:46:22,578 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'list'>
+2025-04-11 01:46:22,969 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=0, 열=0
+2025-04-11 01:46:22,969 - src.gui.analysis_view - INFO - 클릭된 항목: categorical_columns, 행: 0, 열: 0
+2025-04-11 01:46:22,969 - src.gui.analysis_view - WARNING - 선택한 항목에 데이터가 없습니다
+2025-04-11 01:46:23,073 - src.gui.analysis_view - INFO - 클릭된 항목: categorical_columns, 행: 0, 열: 0
+2025-04-11 01:46:23,073 - src.gui.analysis_view - WARNING - 선택한 항목에 데이터가 없습니다
+2025-04-11 01:46:25,699 - src.core.analysis_engine - INFO - 데이터 분석 시작: 100 행, 5 열
+2025-04-11 01:46:25,701 - src.core.analysis_engine - INFO - 데이터 분석 완료
+2025-04-11 01:46:25,701 - src.gui.analysis_view - DEBUG - 결과 하위 항목 추가: categorical_columns, 데이터 경로: 
+basic_stats.categorical_columns
+2025-04-11 01:46:25,702 - src.gui.analysis_view - DEBUG - 결과 하위 항목 추가: column_names, 데이터 경로: basic_s
+tats.column_names
+2025-04-11 01:46:25,702 - src.gui.analysis_view - DEBUG - 결과 하위 항목 추가: columns, 데이터 경로: basic_stats.
+columns
+2025-04-11 01:46:25,702 - src.gui.analysis_view - DEBUG - 결과 하위 항목 추가: missing_values, 데이터 경로: basic
+_stats.missing_values
+2025-04-11 01:46:25,702 - src.gui.analysis_view - DEBUG - 결과 하위 항목 추가: numeric_columns, 데이터 경로: basi
+c_stats.numeric_columns
+2025-04-11 01:46:25,702 - src.gui.analysis_view - DEBUG - 결과 하위 항목 추가: rows, 데이터 경로: basic_stats.row
+s
+2025-04-11 01:46:25,702 - src.gui.analysis_view - DEBUG - 결과 최상위 항목 추가: basic_stats
+2025-04-11 01:46:25,702 - src.gui.analysis_view - DEBUG - 결과 최상위 항목 추가: categorical_stats
+2025-04-11 01:46:25,702 - src.gui.analysis_view - DEBUG - 결과 최상위 항목 추가: correlation
+2025-04-11 01:46:25,702 - src.gui.analysis_view - INFO - 3개의 분석 결과가 로드되었습니다
+2025-04-11 01:46:25,703 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=0, 열=0
+2025-04-11 01:46:25,703 - src.gui.analysis_view - INFO - 클릭된 항목: basic_stats, 행: 0, 열: 0
+2025-04-11 01:46:25,703 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'dict'>
+2025-04-11 01:46:25,704 - src.gui.analysis_view - INFO - 클릭된 항목: basic_stats, 행: 0, 열: 0
+2025-04-11 01:46:25,704 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'dict'>
+2025-04-11 01:46:27,537 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=0, 열=0
+2025-04-11 01:46:27,537 - src.gui.analysis_view - INFO - 클릭된 항목: categorical_columns, 행: 0, 열: 0
+2025-04-11 01:46:27,537 - src.gui.analysis_view - WARNING - 선택한 항목에 데이터가 없습니다
+2025-04-11 01:46:27,634 - src.gui.analysis_view - INFO - 클릭된 항목: categorical_columns, 행: 0, 열: 0
+2025-04-11 01:46:27,634 - src.gui.analysis_view - WARNING - 선택한 항목에 데이터가 없습니다
+2025-04-11 01:46:28,076 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=1, 열=0
+2025-04-11 01:46:28,077 - src.gui.analysis_view - INFO - 클릭된 항목: column_names, 행: 1, 열: 0
+2025-04-11 01:46:28,077 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'list'>
+2025-04-11 01:46:28,196 - src.gui.analysis_view - INFO - 클릭된 항목: column_names, 행: 1, 열: 0
+2025-04-11 01:46:28,196 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'list'>
+2025-04-11 01:46:29,185 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=2, 열=0
+2025-04-11 01:46:29,185 - src.gui.analysis_view - INFO - 클릭된 항목: columns, 행: 2, 열: 0
+2025-04-11 01:46:29,185 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'int'>
+2025-04-11 01:46:29,595 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=1, 열=0
+2025-04-11 01:46:29,596 - src.gui.analysis_view - INFO - 클릭된 항목: column_names, 행: 1, 열: 0
+2025-04-11 01:46:29,596 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'list'>
+2025-04-11 01:46:29,977 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=0, 열=0
+2025-04-11 01:46:29,977 - src.gui.analysis_view - INFO - 클릭된 항목: categorical_columns, 행: 0, 열: 0
+2025-04-11 01:46:29,977 - src.gui.analysis_view - WARNING - 선택한 항목에 데이터가 없습니다
+2025-04-11 01:46:30,662 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=1, 열=0
+2025-04-11 01:46:30,663 - src.gui.analysis_view - INFO - 클릭된 항목: column_names, 행: 1, 열: 0
+2025-04-11 01:46:30,663 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'list'>
+2025-04-11 01:46:32,037 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=0, 열=0
+2025-04-11 01:46:32,037 - src.gui.analysis_view - INFO - 클릭된 항목: categorical_columns, 행: 0, 열: 0
+2025-04-11 01:46:32,037 - src.gui.analysis_view - WARNING - 선택한 항목에 데이터가 없습니다
+2025-04-11 01:46:32,499 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=1, 열=0
+2025-04-11 01:46:32,499 - src.gui.analysis_view - INFO - 클릭된 항목: column_names, 행: 1, 열: 0
+2025-04-11 01:46:32,499 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'list'>
+2025-04-11 01:46:32,960 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=0, 열=0
+2025-04-11 01:46:32,961 - src.gui.analysis_view - INFO - 클릭된 항목: categorical_columns, 행: 0, 열: 0
+2025-04-11 01:46:32,961 - src.gui.analysis_view - WARNING - 선택한 항목에 데이터가 없습니다
+2025-04-11 01:46:33,844 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=1, 열=0
+2025-04-11 01:46:33,844 - src.gui.analysis_view - INFO - 클릭된 항목: column_names, 행: 1, 열: 0
+2025-04-11 01:46:33,844 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'list'>
+2025-04-11 01:46:35,541 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=0, 열=0
+2025-04-11 01:46:35,541 - src.gui.analysis_view - INFO - 클릭된 항목: categorical_columns, 행: 0, 열: 0
+2025-04-11 01:46:35,541 - src.gui.analysis_view - WARNING - 선택한 항목에 데이터가 없습니다
+2025-04-11 01:46:36,294 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=1, 열=0
+2025-04-11 01:46:36,294 - src.gui.analysis_view - INFO - 클릭된 항목: column_names, 행: 1, 열: 0
+2025-04-11 01:46:36,294 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'list'>
+2025-04-11 01:46:38,565 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=2, 열=0
+2025-04-11 01:46:38,565 - src.gui.analysis_view - INFO - 클릭된 항목: columns, 행: 2, 열: 0
+2025-04-11 01:46:38,566 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'int'>
+2025-04-11 01:46:39,645 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=3, 열=0
+2025-04-11 01:46:39,645 - src.gui.analysis_view - INFO - 클릭된 항목: missing_values, 행: 3, 열: 0
+2025-04-11 01:46:39,645 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'dict'>
+2025-04-11 01:46:42,747 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=4, 열=0
+2025-04-11 01:46:42,748 - src.gui.analysis_view - INFO - 클릭된 항목: numeric_columns, 행: 4, 열: 0
+2025-04-11 01:46:42,748 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'list'>
+2025-04-11 01:46:43,425 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=3, 열=0
+2025-04-11 01:46:43,425 - src.gui.analysis_view - INFO - 클릭된 항목: missing_values, 행: 3, 열: 0
+2025-04-11 01:46:43,425 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'dict'>
+2025-04-11 01:46:43,761 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=2, 열=0
+2025-04-11 01:46:43,761 - src.gui.analysis_view - INFO - 클릭된 항목: columns, 행: 2, 열: 0
+2025-04-11 01:46:43,761 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'int'>
+2025-04-11 01:46:44,666 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=1, 열=0
+2025-04-11 01:46:44,667 - src.gui.analysis_view - INFO - 클릭된 항목: column_names, 행: 1, 열: 0
+2025-04-11 01:46:44,667 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'list'>
+2025-04-11 01:46:45,551 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=0, 열=0
+2025-04-11 01:46:45,551 - src.gui.analysis_view - INFO - 클릭된 항목: categorical_columns, 행: 0, 열: 0
+2025-04-11 01:46:45,551 - src.gui.analysis_view - WARNING - 선택한 항목에 데이터가 없습니다
+2025-04-11 01:46:47,653 - src.gui.analysis_view - INFO - 클릭된 항목: categorical_columns, 행: 0, 열: 0
+2025-04-11 01:46:47,653 - src.gui.analysis_view - WARNING - 선택한 항목에 데이터가 없습니다
+2025-04-11 01:46:48,650 - src.gui.analysis_view - INFO - 키보드로 선택된 항목 인덱스: 행=2, 열=0
+2025-04-11 01:46:48,650 - src.gui.analysis_view - INFO - 클릭된 항목: columns, 행: 2, 열: 0
+2025-04-11 01:46:48,650 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'int'>
+2025-04-11 01:46:48,763 - src.gui.analysis_view - INFO - 클릭된 항목: columns, 행: 2, 열: 0
+2025-04-11 01:46:48,763 - src.gui.analysis_view - INFO - 아이템 데이터 유형: <class 'int'>

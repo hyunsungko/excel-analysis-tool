@@ -1,0 +1,338 @@
+
+===== 오류 발생: 2025-04-11 01:48:29.001970 =====
+오류 메시지: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+추적 정보:
+Traceback (most recent call last):
+  File "d:\development\excel_anaylisis\src\gui\analysis_view.py", line 515, in onResultItemClicked
+    if not item_data and item_path:
+           ^^^^^^^^^
+  File "C:\Users\ffgtt\AppData\Roaming\Python\Python313\site-packages\pandas\core\generic.py", line 1577, in __nonzero__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+
+현재 결과 구조:
+- basic_stats (타입: dict)
+- categorical_stats (타입: dict)
+- correlation (타입: DataFrame)
+- group_by_17. 과제1 전반적 의견 (1번) (타입: DataFrame)
+
+===== 오류 발생: 2025-04-11 01:48:29.595442 =====
+오류 메시지: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+추적 정보:
+Traceback (most recent call last):
+  File "d:\development\excel_anaylisis\src\gui\analysis_view.py", line 515, in onResultItemClicked
+    if not item_data and item_path:
+           ^^^^^^^^^
+  File "C:\Users\ffgtt\AppData\Roaming\Python\Python313\site-packages\pandas\core\generic.py", line 1577, in __nonzero__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+
+현재 결과 구조:
+- basic_stats (타입: dict)
+- categorical_stats (타입: dict)
+- correlation (타입: DataFrame)
+- group_by_17. 과제1 전반적 의견 (1번) (타입: DataFrame)
+
+===== 오류 발생: 2025-04-11 01:48:32.209735 =====
+오류 메시지: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+추적 정보:
+Traceback (most recent call last):
+  File "d:\development\excel_anaylisis\src\gui\analysis_view.py", line 515, in onResultItemClicked
+    if not item_data and item_path:
+           ^^^^^^^^^
+  File "C:\Users\ffgtt\AppData\Roaming\Python\Python313\site-packages\pandas\core\generic.py", line 1577, in __nonzero__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+
+현재 결과 구조:
+- basic_stats (타입: dict)
+- categorical_stats (타입: dict)
+- correlation (타입: DataFrame)
+- group_by_17. 과제1 전반적 의견 (1번) (타입: DataFrame)
+
+===== 오류 발생: 2025-04-11 01:48:33.535401 =====
+오류 메시지: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+추적 정보:
+Traceback (most recent call last):
+  File "d:\development\excel_anaylisis\src\gui\analysis_view.py", line 515, in onResultItemClicked
+    if not item_data and item_path:
+           ^^^^^^^^^
+  File "C:\Users\ffgtt\AppData\Roaming\Python\Python313\site-packages\pandas\core\generic.py", line 1577, in __nonzero__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+
+현재 결과 구조:
+- basic_stats (타입: dict)
+- categorical_stats (타입: dict)
+- correlation (타입: DataFrame)
+- group_by_17. 과제1 전반적 의견 (1번) (타입: DataFrame)
+
+===== 오류 발생: 2025-04-11 01:48:35.736853 =====
+오류 메시지: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+추적 정보:
+Traceback (most recent call last):
+  File "d:\development\excel_anaylisis\src\gui\analysis_view.py", line 515, in onResultItemClicked
+    if not item_data and item_path:
+           ^^^^^^^^^
+  File "C:\Users\ffgtt\AppData\Roaming\Python\Python313\site-packages\pandas\core\generic.py", line 1577, in __nonzero__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+
+현재 결과 구조:
+- basic_stats (타입: dict)
+- categorical_stats (타입: dict)
+- correlation (타입: DataFrame)
+- group_by_17. 과제1 전반적 의견 (1번) (타입: DataFrame)
+
+===== 오류 발생: 2025-04-11 01:48:37.144693 =====
+오류 메시지: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+추적 정보:
+Traceback (most recent call last):
+  File "d:\development\excel_anaylisis\src\gui\analysis_view.py", line 515, in onResultItemClicked
+    if not item_data and item_path:
+           ^^^^^^^^^
+  File "C:\Users\ffgtt\AppData\Roaming\Python\Python313\site-packages\pandas\core\generic.py", line 1577, in __nonzero__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+
+현재 결과 구조:
+- basic_stats (타입: dict)
+- categorical_stats (타입: dict)
+- correlation (타입: DataFrame)
+- group_by_17. 과제1 전반적 의견 (1번) (타입: DataFrame)
+
+===== 오류 발생: 2025-04-11 01:48:37.242155 =====
+오류 메시지: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+추적 정보:
+Traceback (most recent call last):
+  File "d:\development\excel_anaylisis\src\gui\analysis_view.py", line 515, in onResultItemClicked
+    if not item_data and item_path:
+           ^^^^^^^^^
+  File "C:\Users\ffgtt\AppData\Roaming\Python\Python313\site-packages\pandas\core\generic.py", line 1577, in __nonzero__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+
+현재 결과 구조:
+- basic_stats (타입: dict)
+- categorical_stats (타입: dict)
+- correlation (타입: DataFrame)
+- group_by_17. 과제1 전반적 의견 (1번) (타입: DataFrame)
+
+===== 오류 발생: 2025-04-11 01:51:42.554086 =====
+오류 메시지: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+추적 정보:
+Traceback (most recent call last):
+  File "d:\development\excel_anaylisis\src\gui\analysis_view.py", line 515, in onResultItemClicked
+    if not item_data and item_path:
+           ^^^^^^^^^
+  File "C:\Users\ffgtt\AppData\Roaming\Python\Python313\site-packages\pandas\core\generic.py", line 1577, in __nonzero__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+
+현재 결과 구조:
+- basic_stats (타입: dict)
+- categorical_stats (타입: dict)
+- correlation (타입: DataFrame)
+- group_by_17. 과제1 전반적 의견 (1번) (타입: DataFrame)
+
+===== 오류 발생: 2025-04-11 01:51:42.599863 =====
+오류 메시지: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+추적 정보:
+Traceback (most recent call last):
+  File "d:\development\excel_anaylisis\src\gui\analysis_view.py", line 515, in onResultItemClicked
+    if not item_data and item_path:
+           ^^^^^^^^^
+  File "C:\Users\ffgtt\AppData\Roaming\Python\Python313\site-packages\pandas\core\generic.py", line 1577, in __nonzero__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+
+현재 결과 구조:
+- basic_stats (타입: dict)
+- categorical_stats (타입: dict)
+- correlation (타입: DataFrame)
+- group_by_17. 과제1 전반적 의견 (1번) (타입: DataFrame)
+
+===== 오류 발생: 2025-04-11 01:51:42.993293 =====
+오류 메시지: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+추적 정보:
+Traceback (most recent call last):
+  File "d:\development\excel_anaylisis\src\gui\analysis_view.py", line 515, in onResultItemClicked
+    if not item_data and item_path:
+           ^^^^^^^^^
+  File "C:\Users\ffgtt\AppData\Roaming\Python\Python313\site-packages\pandas\core\generic.py", line 1577, in __nonzero__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+
+현재 결과 구조:
+- basic_stats (타입: dict)
+- categorical_stats (타입: dict)
+- correlation (타입: DataFrame)
+- group_by_17. 과제1 전반적 의견 (1번) (타입: DataFrame)
+
+===== 오류 발생: 2025-04-11 01:52:51.040442 =====
+오류 메시지: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+추적 정보:
+Traceback (most recent call last):
+  File "d:\development\excel_anaylisis\src\gui\analysis_view.py", line 515, in onResultItemClicked
+    if not item_data and item_path:
+           ^^^^^^^^^
+  File "C:\Users\ffgtt\AppData\Roaming\Python\Python313\site-packages\pandas\core\generic.py", line 1577, in __nonzero__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+
+현재 결과 구조:
+- basic_stats (타입: dict)
+- categorical_stats (타입: dict)
+- correlation (타입: DataFrame)
+- group_by_17. 과제1 전반적 의견 (1번) (타입: DataFrame)
+
+===== 오류 발생: 2025-04-11 01:52:51.557212 =====
+오류 메시지: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+추적 정보:
+Traceback (most recent call last):
+  File "d:\development\excel_anaylisis\src\gui\analysis_view.py", line 515, in onResultItemClicked
+    if not item_data and item_path:
+           ^^^^^^^^^
+  File "C:\Users\ffgtt\AppData\Roaming\Python\Python313\site-packages\pandas\core\generic.py", line 1577, in __nonzero__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+
+현재 결과 구조:
+- basic_stats (타입: dict)
+- categorical_stats (타입: dict)
+- correlation (타입: DataFrame)
+- group_by_17. 과제1 전반적 의견 (1번) (타입: DataFrame)
+
+===== 오류 발생: 2025-04-11 01:52:51.961320 =====
+오류 메시지: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+추적 정보:
+Traceback (most recent call last):
+  File "d:\development\excel_anaylisis\src\gui\analysis_view.py", line 515, in onResultItemClicked
+    if not item_data and item_path:
+           ^^^^^^^^^
+  File "C:\Users\ffgtt\AppData\Roaming\Python\Python313\site-packages\pandas\core\generic.py", line 1577, in __nonzero__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+
+현재 결과 구조:
+- basic_stats (타입: dict)
+- categorical_stats (타입: dict)
+- correlation (타입: DataFrame)
+- group_by_17. 과제1 전반적 의견 (1번) (타입: DataFrame)
+
+===== 오류 발생: 2025-04-11 01:55:13.041627 =====
+오류 메시지: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+추적 정보:
+Traceback (most recent call last):
+  File "d:\development\excel_anaylisis\src\gui\analysis_view.py", line 515, in onResultItemClicked
+    if not item_data and item_path:
+           ^^^^^^^^^
+  File "C:\Users\ffgtt\AppData\Roaming\Python\Python313\site-packages\pandas\core\generic.py", line 1577, in __nonzero__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+
+현재 결과 구조:
+- basic_stats (타입: dict)
+- categorical_stats (타입: dict)
+- correlation (타입: DataFrame)
+- group_by_17. 과제1 전반적 의견 (1번) (타입: DataFrame)
+
+===== 오류 발생: 2025-04-11 01:58:20.710657 =====
+오류 메시지: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+추적 정보:
+Traceback (most recent call last):
+  File "D:\development\excel_anaylisis\src\gui\analysis_view.py", line 520, in onResultItemClicked
+    if not item_data and item_path:
+           ^^^^^^^^^
+  File "C:\Users\ffgtt\AppData\Roaming\Python\Python313\site-packages\pandas\core\generic.py", line 1577, in __nonzero__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+
+현재 결과 구조:
+- basic_stats (타입: dict)
+- categorical_stats (타입: dict)
+- correlation (타입: DataFrame)
+
+===== 오류 발생: 2025-04-11 01:58:20.822795 =====
+오류 메시지: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+추적 정보:
+Traceback (most recent call last):
+  File "D:\development\excel_anaylisis\src\gui\analysis_view.py", line 520, in onResultItemClicked
+    if not item_data and item_path:
+           ^^^^^^^^^
+  File "C:\Users\ffgtt\AppData\Roaming\Python\Python313\site-packages\pandas\core\generic.py", line 1577, in __nonzero__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+
+현재 결과 구조:
+- basic_stats (타입: dict)
+- categorical_stats (타입: dict)
+- correlation (타입: DataFrame)
+
+===== 오류 발생: 2025-04-11 01:59:16.385333 =====
+오류 메시지: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+추적 정보:
+Traceback (most recent call last):
+  File "D:\development\excel_anaylisis\src\gui\analysis_view.py", line 520, in onResultItemClicked
+    if not item_data and item_path:
+           ^^^^^^^^^
+  File "C:\Users\ffgtt\AppData\Roaming\Python\Python313\site-packages\pandas\core\generic.py", line 1577, in __nonzero__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+
+현재 결과 구조:
+- basic_stats (타입: dict)
+- categorical_stats (타입: dict)
+- correlation (타입: DataFrame)
+
+===== 오류 발생: 2025-04-11 01:59:16.466395 =====
+오류 메시지: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+추적 정보:
+Traceback (most recent call last):
+  File "D:\development\excel_anaylisis\src\gui\analysis_view.py", line 520, in onResultItemClicked
+    if not item_data and item_path:
+           ^^^^^^^^^
+  File "C:\Users\ffgtt\AppData\Roaming\Python\Python313\site-packages\pandas\core\generic.py", line 1577, in __nonzero__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+
+현재 결과 구조:
+- basic_stats (타입: dict)
+- categorical_stats (타입: dict)
+- correlation (타입: DataFrame)
