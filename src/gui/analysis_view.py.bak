@@ -1,0 +1,1186 @@
+import pandas as pd
+import numpy as np
+from typing import Optional, List, Dict, Any, Union
+from PyQt5.QtWidgets import (
+    QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, 
+    QComboBox, QTabWidget, QTableView, QHeaderView, QSplitter,
+    QTreeView, QTextEdit, QFrame, QScrollArea, QMessageBox, QFileDialog, QDialog, QListWidget, QGroupBox
+)
+from PyQt5.QtCore import Qt, QAbstractTableModel, QModelIndex, QVariant, pyqtSignal, QTimer
+from PyQt5.QtGui import QStandardItemModel, QStandardItem, QColor, QFont, QBrush
+import logging
+import json
+import os
+from datetime import datetime
+import sip
+
+# 주관식 텍스트 미리보기 패널 임포트
+from src.gui.text_preview_panel import TextPreviewPanel
+
+# 로거 설정
+logger = logging.getLogger(__name__)
+
+class ResultTableModel(QAbstractTableModel):
+    """분석 결과 테이블 모델"""
+    
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.headers = ['속성', '값']  # 헤더를 한글로 변경
+        self.results = []
+        self.logger = logging.getLogger(__name__)
+        self.table_data = []  # 내보내기용 테이블 데이터
+    
+    @property
+    def header_labels(self):
+        """헤더 레이블 반환 (내보내기용)"""
+        return self.headers.copy()
+        
+    @property
+    def table_data(self):
+        """테이블 데이터 반환 (내보내기용)"""
+        return self._table_data
+        
+    @table_data.setter
+    def table_data(self, data):
+        """테이블 데이터 설정"""
+        self._table_data = data
+    
+    def rowCount(self, parent=None):
+        return len(self.results)
+        
+    def columnCount(self, parent=None):
+        return len(self.headers)
+    
+    def data(self, index, role):
+        if not index.isValid():
+            return None
+            
+        if role == Qt.DisplayRole:
+            value = self.results[index.row()][index.column()]
+            
+            # 특별한 값 형식 처리
+            if isinstance(value, float):
+                # 소수점 3자리까지 표시
+                return f"{value:.3f}"
+            elif isinstance(value, dict):
+                # 범주형 통계의 '상위값' 데이터 특별 처리
+                if index.column() == 1 and self.results[index.row()][0] == '상위값':
+                    # 상위값 데이터를 읽기 쉬운 형식으로 변환
+                    result = ""
+                    for category, stats in sorted(value.items(), key=lambda x: x[1].get('개수', 0), reverse=True):
+                        count = stats.get('개수', 0)
+                        pct = stats.get('비율', 0.0)
+                        result += f"{category}: {count}개 ({pct:.1f}%)\n"
+                    return result.strip()
+                # 범주형 통계의 일반 상위값 처리 (열이름 - 상위값 형태)
+                elif index.column() == 1 and "상위값" in self.results[index.row()][0]:
+                    # 상위값 데이터를 읽기 쉬운 형식으로 변환
+                    result = ""
+                    for category, stats in sorted(value.items(), key=lambda x: x[1].get('개수', 0), reverse=True):
+                        count = stats.get('개수', 0)
+                        pct = stats.get('비율', 0.0)
+                        result += f"{category}: {count}개 ({pct:.1f}%)\n"
+                    return result.strip()
+                # 히스토그램 등의 복잡한 데이터 처리
+                elif index.column() == 1 and self.results[index.row()][0] == '히스토그램':
+                    return f"[클릭하여 구간 정보 보기]"
+                # 범주형 통계의 다른 모든 딕셔너리 데이터 처리 - "[데이터 확인]" 대신 내용 표시
+                else:
+                    try:
+                        # 범주형 통계 데이터인지 확인
+                        if any(k in value for k in ['개수', '비율']):
+                            result = ""
+                            count = 0
+                            for key, val in sorted(value.items(), key=lambda x: x[1] if isinstance(x[1], (int, float)) else 0, reverse=True):
+                                if count >= 5:  # 상위 5개만 표시
+                                    result += "...\n"
+                                    break
+                                if isinstance(val, dict):
+                                    cnt = val.get('개수', 0)
+                                    pct = val.get('비율', 0.0)
+                                    result += f"{key}: {cnt}개 ({pct:.1f}%)\n"
+                                else:
+                                    result += f"{key}: {val}\n"
+                                count += 1
+                            return result.strip() if result else "[데이터 없음]"
+                    except:
+                        pass
+                    return f"[데이터 확인]"
+            elif isinstance(value, list):
+                # 리스트는 간략화하여 표시
+                return f"[리스트: {len(value)}개 항목]"
+            else:
+                return str(value)
+                
+        elif role == Qt.TextAlignmentRole:
+            # 첫 번째 열(키)은 왼쪽 정렬, 두 번째 열(값)은 왼쪽 또는 오른쪽 정렬
+            if index.column() == 0:
+                return int(Qt.AlignLeft | Qt.AlignVCenter)
+            else:
+                # 상위값처럼 여러 줄 텍스트는 왼쪽 정렬
+                value = self.results[index.row()][index.column()]
+                if isinstance(value, dict) and self.results[index.row()][0] == '상위값':
+                    return int(Qt.AlignLeft | Qt.AlignVCenter)
+                # 그 외에는 오른쪽 정렬
+                return int(Qt.AlignRight | Qt.AlignVCenter)
+                
+        elif role == Qt.FontRole:
+            # 속성명에 폰트 강조
+            if index.column() == 0:
+                font = QFont()
+                font.setBold(True)
+                return font
+            elif index.column() == 1:
+                # 히스토그램이나 복잡한 데이터는 이탤릭체로 표시
+                if isinstance(self.results[index.row()][1], dict) or isinstance(self.results[index.row()][1], list):
+                    font = QFont()
+                    font.setItalic(True)
+                    return font
+        
+        elif role == Qt.BackgroundRole:
+            # 행마다 번갈아 배경색 변경하여 가독성 향상 
+            if index.row() % 2 == 0:
+                return QBrush(QColor(248, 248, 248))
+            
+            # 히스토그램 항목 배경색 변경
+            if index.column() == 1 and self.results[index.row()][0] == '히스토그램':
+                return QBrush(QColor(240, 248, 255))  # 연한 하늘색
+            
+            # 상위값 항목 배경색 변경
+            if index.column() == 1 and (self.results[index.row()][0] == '상위값' or "상위값" in self.results[index.row()][0]):
+                return QBrush(QColor(245, 255, 245))  # 연한 민트색
+            
+        elif role == Qt.ForegroundRole:
+            # 결측값, 결측률 등의 항목 텍스트 색상 변경
+            if index.column() == 0:
+                key = self.results[index.row()][0]
+                if '결측' in key:
+                    return QBrush(QColor(220, 20, 60))  # 어두운 빨간색
+                elif key == '평균' or key == '중앙값':
+                    return QBrush(QColor(0, 0, 128))  # 어두운 파란색
+                elif key == '표준편차' or key == '분산':
+                    return QBrush(QColor(25, 25, 112))  # 미드나이트 블루
+                elif key == '상위값':
+                    return QBrush(QColor(0, 100, 0))  # 어두운 녹색
+            
+            # 히스토그램 항목 텍스트 색상 변경
+            if index.column() == 1 and self.results[index.row()][0] == '히스토그램':
+                return QBrush(QColor(70, 130, 180))  # 스틸 블루
+                
+            # 상위값 항목 텍스트 색상
+            if index.column() == 1 and (self.results[index.row()][0] == '상위값' or "상위값" in self.results[index.row()][0]):
+                return QBrush(QColor(0, 100, 0))  # 어두운 녹색
+        
+        return None
+        
+    def headerData(self, section, orientation, role):
+        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
+            return self.headers[section]
+        return None
+        
+    def load_data(self, data, column_name=None):
+        """통계 데이터 로드
+        
+        Args:
+            data: 로드할 데이터 (딕셔너리, 리스트 등)
+            column_name: 선택된 열 이름 (수치형 통계인 경우에만 사용)
+        """
+        self.results = []
+        
+        # 데이터가 없는 경우
+        if data is None:
+            self.results = [('데이터 없음', '')]
+            self.layoutChanged.emit()
+            self.logger.warning("로드할 데이터가 없습니다")
+            return
+        
+        # 데이터 타입에 따른 처리
+        if isinstance(data, dict):
+            # 수치형 통계 데이터 처리 (column_name이 키인 경우)
+            if column_name is not None and column_name in data:
+                col_stats = data[column_name]
+                
+                # 필수 정보 먼저 추가
+                essential_keys = ['개수', '결측값', '결측률', '평균', '중앙값', '표준편차', '최소값', '최대값', '범위']
+                for key in essential_keys:
+                    if key in col_stats:
+                        self.results.append((key, col_stats[key]))
+                
+                # 분위수 정보 추가
+                for key in sorted([k for k in col_stats.keys() if k.startswith('분위수')]):
+                    self.results.append((key, col_stats[key]))
+                
+                # 기타 통계 정보 추가 (히스토그램 제외)
+                for key, value in col_stats.items():
+                    if key not in essential_keys and not key.startswith('분위수') and key != '히스토그램':
+                        self.results.append((key, value))
+                
+                # 히스토그램 정보는 마지막에 추가 (있는 경우)
+                if '히스토그램' in col_stats and col_stats['히스토그램']:
+                    self.results.append(('히스토그램', col_stats['히스토그램']))
+                    
+                self.logger.info(f"수치형 통계 데이터 테이블 업데이트: {column_name}, {len(self.results)}개 항목")
+            else:
+                # 일반 딕셔너리 데이터 처리
+                for key, value in data.items():
+                    if isinstance(value, dict):
+                        # 범주형 통계 특별 처리 ('상위값' 키가 있는 경우)
+                        if '상위값' in value and '개수' in value:
+                            # 필수 정보 먼저 추가
+                            essential_cat_keys = ['개수', '결측값', '결측률', '고유값수', '데이터타입']
+                            for cat_key in essential_cat_keys:
+                                if cat_key in value:
+                                    self.results.append((f"{key} - {cat_key}", value[cat_key]))
+                            
+                            # 상위값 정보 추가
+                            if isinstance(value['상위값'], dict):
+                                self.results.append((f"{key} - 상위값", value['상위값']))
+                        else:
+                            # 중첩된 딕셔너리는 항목별로 추가
+                            for sub_key, sub_value in value.items():
+                                self.results.append((f"{key} - {sub_key}", sub_value))
+                    else:
+                        self.results.append((str(key), value))
+                        
+                self.logger.info(f"딕셔너리 데이터 테이블 업데이트: {len(self.results)}개 항목")
+        
+        elif isinstance(data, list):
+            # 리스트 데이터 처리
+            if all(isinstance(item, tuple) and len(item) == 2 for item in data):
+                # 이미 (키, 값) 형태로 준비된 경우
+                self.results = data
+            else:
+                # 일반 리스트 항목을 항목 번호와 함께 표시
+                for i, item in enumerate(data):
+                    self.results.append((f"항목 {i+1}", item))
+                    
+            self.logger.info(f"리스트 데이터 테이블 업데이트: {len(self.results)}개 항목")
+        
+        elif isinstance(data, pd.DataFrame):
+            # 데이터프레임 처리
+            # 첫 번째 행은 열 이름으로 추가
+            self.results.append(("열 이름", ", ".join(data.columns.tolist())))
+            
+            # 기본 정보 추가
+            self.results.append(("행 수", data.shape[0]))
+            self.results.append(("열 수", data.shape[1]))
+            
+            # 첫 10개 행 정보 추가
+            for i, (idx, row) in enumerate(data.head(10).iterrows()):
+                row_str = ", ".join([f"{col}: {val}" for col, val in row.items()])
+                self.results.append((f"행 {i+1} ({idx})", row_str[:100] + "..." if len(row_str) > 100 else row_str))
+                
+            self.logger.info(f"데이터프레임 테이블 업데이트: {data.shape[0]}행 x {data.shape[1]}열")
+        
+        else:
+            # 기타 데이터 타입 처리
+            self.results.append(("값", str(data)))
+            self.logger.info(f"기타 데이터 타입 테이블 업데이트: {type(data).__name__}")
+            
+        # 데이터 변경 알림
+        self.layoutChanged.emit()
+    
+    def updateResults(self, stats_type, result, column_name=None):
+        """분석 결과 업데이트"""
+        if stats_type == "수치형통계":
+            self.load_data(result, column_name)
+        else:
+            # 다른 유형의 결과 처리
+            self.results = []
+            
+            if isinstance(result, dict):
+                for key, value in result.items():
+                    if isinstance(value, dict):
+                        # 내부 딕셔너리의 경우 펼쳐서 표시 (계층 표시)
+                        for sub_key, sub_value in value.items():
+                            self.results.append((f"{key} - {sub_key}", sub_value))
+                    else:
+                        self.results.append((key, value))
+            elif isinstance(result, list):
+                for i, item in enumerate(result):
+                    self.results.append((f"항목 {i+1}", item))
+            else:
+                self.results.append(("결과", result))
+                
+            self.layoutChanged.emit()
+            self.logger.info(f"{stats_type} 결과 테이블 업데이트: {len(self.results)}개 항목")
+    
+    def onResultItemClicked(self, index):
+        """결과 항목 클릭 시 호출되는 메서드"""
+        try:
+            # 로그 디렉토리 확인
+            os.makedirs("logs", exist_ok=True)
+            
+            # 모델에서 항목 가져오기
+            item = self.tree_model.itemFromIndex(index)
+            if not item:
+                logger.warning("선택된 항목이 없습니다")
+                return
+                
+            # 항목 데이터 및 경로 가져오기
+            item_data = item.data(Qt.UserRole + 1)  # 항목 실제 데이터
+            item_path = item.data(Qt.UserRole)  # 항목 경로
+            
+            logger.info(f"선택된 항목: {item.text()}, 경로: {item_path}, 데이터 유형: {type(item_data)}")
+            
+            # 모든 Qt 위젯 객체 먼저 확인
+            widgets_valid = True
+            widget_names = [
+                'result_title', 'result_description', 'result_detail_label', 
+                'result_table', 'text_preview_panel', 'export_button', 
+                'result_table_model'
+            ]
+            
+            # 위젯 상태 로깅
+            with open("logs/widget_state.log", "a", encoding="utf-8") as log_file:
+                log_file.write(f"\n===== 위젯 상태 확인 (클릭 시작) =====\n")
+                log_file.write(f"시간: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                log_file.write(f"항목: {item.text()}, 경로: {item_path}\n")
+            
+            deleted_widgets = []
+            for widget_name in widget_names:
+                if hasattr(self, widget_name):
+                    widget = getattr(self, widget_name)
+                    # None 체크, sip.isdeleted 체크, 그리고 PyQt 객체 유효성 체크
+                    is_deleted = widget is None
+                    
+                    if not is_deleted and hasattr(sip, 'isdeleted'):
+                        try:
+                            is_deleted = sip.isdeleted(widget)
+                        except Exception as e:
+                            logger.error(f"sip.isdeleted 검사 중 오류 ({widget_name}): {str(e)}")
+                            is_deleted = True  # 오류 발생 시 위젯 유효하지 않다고 가정
+                    
+                    # 추가적인 PyQt 객체 유효성 검사
+                    if not is_deleted and hasattr(widget, 'isValid'):
+                        try:
+                            is_deleted = not widget.isValid()
+                        except Exception:
+                            is_deleted = True  # 예외 발생 시 위젯이 유효하지 않다고 가정
+                    
+                    if is_deleted:
+                        deleted_widgets.append(widget_name)
+                        widgets_valid = False
+                        
+                    # 위젯 상태 로깅
+                    with open("logs/widget_state.log", "a", encoding="utf-8") as log_file:
+                        log_file.write(f"{widget_name}: {'삭제됨' if is_deleted else '유효함'}\n")
+                else:
+                    with open("logs/widget_state.log", "a", encoding="utf-8") as log_file:
+                        log_file.write(f"{widget_name}: 존재하지 않음\n")
+                    deleted_widgets.append(widget_name)
+                    widgets_valid = False
+            
+            if not widgets_valid:
+                logger.error(f"다음 위젯이 이미 삭제됨: {', '.join(deleted_widgets)}")
+                # 중요: 적극적으로 위젯들 재생성 시도
+                try:
+                    logger.info("UI 컴포넌트 재초기화 시도")
+                    # 메인 윈도우에 UI 재초기화 요청
+                    QTimer.singleShot(100, self.initUI)  # 약간의 지연 후 UI 재초기화
+                    
+                    # 사용자에게 알림
+                    from PyQt5.QtWidgets import QMessageBox
+                    if hasattr(self, 'isVisible') and self.isVisible():
+                        QMessageBox.information(None, "알림", "UI 컴포넌트가 재설정되었습니다. 다시 시도해주세요.")
+                    return  # 재초기화 후 리턴하여 사용자가 다시 클릭하도록 함
+                except Exception as e:
+                    logger.error(f"UI 재초기화 중 오류: {str(e)}")
+                    import traceback
+                    logger.error(traceback.format_exc())
+                    return
+            
+            # 주관식 텍스트 분석 결과 특별 처리
+            if isinstance(item_path, str) and item_path.startswith("text_analysis."):
+                try:
+                    logger.info(f"주관식 텍스트 분석 결과 표시: {item_path}")
+                    
+                    # 위젯 상태 재확인 후 안전하게 사용
+                    if hasattr(self, 'result_table') and not sip.isdeleted(self.result_table):
+                        self.result_table.hide()
+                    
+                    if hasattr(self, 'text_preview_panel') and not sip.isdeleted(self.text_preview_panel):
+                        self.text_preview_panel.show()
+                    
+                    # 제목 및 설명 표시 (위젯 유효성 검사 후)
+                    if hasattr(self, 'result_title') and not sip.isdeleted(self.result_title):
+                        self.result_title.setText(item.text())
+                    
+                    # 설명 텍스트 설정 (위젯 유효성 검사 후)
+                    if hasattr(self, 'result_description') and not sip.isdeleted(self.result_description):
+                        if "raw_text" in item_path:
+                            self.result_description.setText("원본 주관식 텍스트 데이터입니다.")
+                        elif "cleaned_text" in item_path:
+                            self.result_description.setText("전처리된 주관식 텍스트 데이터입니다.")
+                        elif "tokenized" in item_path:
+                            self.result_description.setText("토큰화된 텍스트 데이터입니다.")
+                        else:
+                            self.result_description.setText("주관식 텍스트 분석 결과입니다.")
+                    
+                    # 텍스트 데이터 표시
+                    if isinstance(item_data, list):
+                        # 텍스트 목록 표시
+                        logger.info(f"텍스트 목록 표시: {len(item_data)}개 항목")
+                        
+                        # 위젯 유효성 검사 후 안전하게 호출
+                        if hasattr(self, 'text_preview_panel') and not sip.isdeleted(self.text_preview_panel):
+                            self.text_preview_panel.load_text_items(item_data)
+                        
+                        # 상세 정보 표시 (위젯 유효성 검사 후)
+                        if hasattr(self, 'result_detail_label') and not sip.isdeleted(self.result_detail_label):
+                            self.result_detail_label.setText(f"{len(item_data)}개 텍스트 항목")
+                        
+                        # 내보내기 버튼 활성화 (위젯 유효성 검사 후)
+                        if hasattr(self, 'export_button') and not sip.isdeleted(self.export_button):
+                            self.export_button.setEnabled(True)
+                        
+                        # 현재 선택 저장
+                        self.current_selection = {
+                            "type": "text_list",
+                            "path": item_path,
+                            "data": item_data
+                        }
+                        
+                        return
+                    elif isinstance(item_data, dict) and ("word_cloud" in item_path or "frequency" in item_path):
+                        # 결과 테이블에 표시할 수 있는 형태로 변환
+                        logger.info(f"텍스트 분석 특수 결과 표시: {item_path}")
+                        
+                        # 테이블 데이터 표시 (위젯 유효성 검사 후)
+                        if hasattr(self, 'result_table') and not sip.isdeleted(self.result_table):
+                            self.result_table.show()
+                        
+                        if hasattr(self, 'text_preview_panel') and not sip.isdeleted(self.text_preview_panel):
+                            self.text_preview_panel.hide()
+                        
+                        # 워드클라우드나 빈도 분석은 테이블에 맞게 변환하여 표시
+                        if isinstance(item_data, dict) and hasattr(self, 'result_table_model') and not sip.isdeleted(self.result_table_model):
+                            # 딕셔너리를 테이블 형태로 변환
+                            if "frequency" in item_path:
+                                self.result_table_model.update_stats("단어 빈도", [("단어", "빈도")] + [(k, v) for k, v in item_data.items()])
+                            else:
+                                self.result_table_model.update_stats(item.text(), [("키", "값")] + list(item_data.items()))
+                        elif isinstance(item_data, list) and hasattr(self, 'result_table_model') and not sip.isdeleted(self.result_table_model):
+                            self.result_table_model.update_stats(item.text(), [("항목", "값")] + [(str(i), v) for i, v in enumerate(item_data)])
+                        elif hasattr(self, 'result_table_model') and not sip.isdeleted(self.result_table_model):
+                            self.result_table_model.update_stats(item.text(), [("키", "값"), (item.text(), str(item_data))])
+                    else:
+                        logger.warning(f"샘플 데이터 타입이 리스트가 아닙니다: {type(item_data)}")
+                        
+                        # 테이블 데이터 표시로 폴백 (위젯 유효성 검사 후)
+                        if hasattr(self, 'result_table') and not sip.isdeleted(self.result_table):
+                            self.result_table.show()
+                        
+                        if hasattr(self, 'text_preview_panel') and not sip.isdeleted(self.text_preview_panel):
+                            self.text_preview_panel.hide()
+                            
+                        # 일반 데이터는 테이블에 표시 (위젯 유효성 검사 후)
+                        if hasattr(self, 'result_table_model') and not sip.isdeleted(self.result_table_model):
+                            self.result_table_model.update_stats(item.text(), [("항목", "값"), (item.text(), str(item_data))])
+                    
+                    # 내보내기 버튼 활성화 (위젯 유효성 검사 후)
+                    if hasattr(self, 'export_button') and not sip.isdeleted(self.export_button):
+                        self.export_button.setEnabled(True)
+                    
+                    # 현재 선택 저장
+                    self.current_selection = {
+                        "type": "text_analysis",
+                        "path": item_path,
+                        "data": item_data
+                    }
+                except Exception as e:
+                    logger.error(f"주관식 텍스트 데이터 처리 중 오류: {str(e)}")
+                    import traceback
+                    logger.error(traceback.format_exc())
+                    
+                    # 결과 테이블 표시 복원 (위젯 유효성 검사 후)
+                    if hasattr(self, 'result_table') and not sip.isdeleted(self.result_table):
+                        self.result_table.show()
+                    
+                    if hasattr(self, 'text_preview_panel') and not sip.isdeleted(self.text_preview_panel):
+                        self.text_preview_panel.hide()
+            else:
+                # 일반 결과 항목 처리
+                logger.info(f"일반 결과 항목 표시: {item.text()}")
+                
+                # 제목 및 설명 표시 (위젯 유효성 검사 후)
+                if hasattr(self, 'result_title') and not sip.isdeleted(self.result_title):
+                    self.result_title.setText(item.text())
+                
+                if hasattr(self, 'result_description') and not sip.isdeleted(self.result_description):
+                    self.result_description.setText("")
+                
+                if hasattr(self, 'result_detail_label') and not sip.isdeleted(self.result_detail_label):
+                    self.result_detail_label.setText("")
+                
+                # 텍스트 패널 숨기기, 테이블 표시 (위젯 유효성 검사 후)
+                if hasattr(self, 'text_preview_panel') and not sip.isdeleted(self.text_preview_panel):
+                    self.text_preview_panel.hide()
+                
+                if hasattr(self, 'result_table') and not sip.isdeleted(self.result_table):
+                    self.result_table.show()
+                
+                # 결과 데이터 타입에 따라 다른 처리
+                if isinstance(item_data, dict):
+                    # 상관 관계 행렬 특별 처리
+                    if item_path == "correlation" or (isinstance(item_path, str) and "correlation" in item_path):
+                        self.displayCorrelationMatrix(item_data, item.text())
+                    else:
+                        # 일반 딕셔너리 데이터 (위젯 유효성 검사 후)
+                        if hasattr(self, 'result_table_model') and not sip.isdeleted(self.result_table_model):
+                            self.result_table_model.update_stats(item.text(), item_data)
+                        
+                        if hasattr(self, 'result_detail_label') and not sip.isdeleted(self.result_detail_label):
+                            self.result_detail_label.setText(f"{len(item_data)}개 항목")
+                elif isinstance(item_data, list):
+                    # 리스트 데이터 (위젯 유효성 검사 후)
+                    if hasattr(self, 'result_table_model') and not sip.isdeleted(self.result_table_model):
+                        self.result_table_model.update_stats(item.text(), item_data)
+                    
+                    if hasattr(self, 'result_detail_label') and not sip.isdeleted(self.result_detail_label):
+                        self.result_detail_label.setText(f"{len(item_data)}개 항목")
+                elif isinstance(item_data, pd.DataFrame):
+                    # 데이터프레임 직접 표시
+                    self.displayDataFrame(item_data, item.text())
+                else:
+                    # 기타 데이터 타입 (위젯 유효성 검사 후)
+                    if hasattr(self, 'result_table_model') and not sip.isdeleted(self.result_table_model):
+                        self.result_table_model.update_stats(item.text(), {item.text(): item_data})
+                
+                # 내보내기 버튼 활성화 (위젯 유효성 검사 후)
+                if hasattr(self, 'export_button') and not sip.isdeleted(self.export_button):
+                    self.export_button.setEnabled(True)
+                
+                # 현재 선택 저장
+                self.current_selection = {
+                    "type": "table",
+                    "path": item_path,
+                    "data": item_data
+                }
+                
+        except Exception as e:
+            # 모든 예외 경우 로깅
+            logger.error(f"결과 항목 클릭 처리 중 예외 발생: {str(e)}")
+            import traceback
+            logger.error(traceback.format_exc())
+            
+            # UI 위젯 참조 재확인 로깅
+            with open("logs/widget_state.log", "a", encoding="utf-8") as log_file:
+                log_file.write("\n===== 위젯 상태 확인 (예외 발생) =====\n")
+                log_file.write(f"시간: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                log_file.write(f"예외: {str(e)}\n")
+                
+                # 주요 위젯들의 상태 확인
+                widgets = [
+                    'result_title', 'result_description', 'result_detail_label', 
+                    'result_table', 'text_preview_panel', 'export_button'
+                ]
+                
+                for widget_name in widgets:
+                    if hasattr(self, widget_name):
+                        widget = getattr(self, widget_name)
+                        is_deleted = widget is None or (hasattr(sip, 'isdeleted') and sip.isdeleted(widget))
+                        log_file.write(f"{widget_name}: {'삭제됨' if is_deleted else '유효함'}\n")
+                    else:
+                        log_file.write(f"{widget_name}: 존재하지 않음\n")
+                        
+            try:
+                # 사용자에게 오류 알림 표시
+                from PyQt5.QtWidgets import QMessageBox
+                # self.isValid() 같은 메서드는 항상 있는 것이 아니므로 hasattr로 확인
+                if hasattr(self, 'isVisible') and self.isVisible(): 
+                    QMessageBox.warning(self, "오류", "결과 처리 중 오류가 발생했습니다.")
+            except Exception as msg_error:
+                logger.error(f"오류 메시지 표시 중 추가 예외: {str(msg_error)}")
+                # 마지막 예외 처리에서도 문제가 생기면 글로벌 msgbox를 시도
+                try:
+                    from PyQt5.QtWidgets import QMessageBox
+                    QMessageBox.warning(None, "오류", "결과 처리 중 오류가 발생했습니다.")
+                except:
+                    pass  # 마지막 방어선도 실패하면 조용히 넘어감
+
+    def onResultItemSelected(self, selected, deselected):
+        """키보드 선택 변경 시 호출되는 메서드"""
+        try:
+            # 로그 디렉토리 확인
+            os.makedirs("logs", exist_ok=True)
+            
+            # 선택된 항목의 인덱스 가져오기
+            selected_indexes = selected.indexes()
+            if not selected_indexes:
+                logger.warning("선택된 항목이 없습니다")
+                return
+                
+            # 첫 번째 선택된 항목 처리
+            index = selected_indexes[0]
+            
+            # 로그에 선택 이벤트 기록
+            logger.info(f"키보드로 선택된 항목 인덱스: 행={index.row()}, 열={index.column()}")
+            
+            # 현재 객체가 유효한지 확인 후 클릭 이벤트와 동일하게 처리
+            if not sip.isdeleted(self):
+                self.onResultItemClicked(index)
+                
+        except Exception as e:
+            # 오류 로깅
+            logger.error(f"결과 항목 선택 처리 중 오류: {str(e)}")
+            
+            # 오류 추적 정보 로깅
+            try:
+                with open("logs/error.log", "a", encoding="utf-8") as log_file:
+                    log_file.write(f"\n===== 키보드 선택 오류: {datetime.now()} =====\n")
+                    log_file.write(f"오류 메시지: {str(e)}\n")
+                    
+                    import traceback
+                    traceback_info = traceback.format_exc()
+                    log_file.write(f"추적 정보:\n{traceback_info}\n")
+            except Exception as log_error:
+                logger.error(f"로그 파일 쓰기 오류: {str(log_error)}")
+
+    def exportResults(self):
+        """현재 분석 결과를 파일로 내보내기"""
+        try:
+            import pandas as pd
+            import json
+            from PyQt5.QtWidgets import QFileDialog
+            import os
+            
+            # 로그 기록
+            logger.info("결과 내보내기 시작")
+            
+            # 현재 선택된 항목 확인
+            selected_indexes = self.result_tree.selectedIndexes()
+            if not selected_indexes:
+                logger.warning("내보낼 항목이 선택되지 않았습니다")
+                return
+                
+            index = selected_indexes[0]
+            item = self.tree_model.itemFromIndex(index)
+            
+            if not item:
+                logger.warning("선택된 항목을 찾을 수 없습니다")
+                return
+                
+            # 항목 데이터 및 텍스트 가져오기
+            item_data = item.data(Qt.UserRole + 1)  # 항목 실제 데이터
+            item_path = item.data(Qt.UserRole)  # 항목 경로
+            item_text = item.text()
+            
+            logger.info(f"내보내기 선택 항목: {item_text}, 경로: {item_path}")
+            
+            # 주관식 텍스트 데이터 내보내기 특별 처리
+            is_text_data = False
+            text_df = None
+            
+            if item_path and item_path.startswith("text_analysis."):
+                # 텍스트 미리보기 패널에서 보여지는 데이터 내보내기
+                logger.info("주관식 텍스트 데이터 내보내기 시도")
+                if hasattr(self, 'text_preview_panel') and not sip.isdeleted(self.text_preview_panel) and self.text_preview_panel.data is not None:
+                    text_df = self.text_preview_panel.data
+                    logger.info(f"텍스트 미리보기 데이터프레임 획득: {text_df.shape}")
+                    is_text_data = True
+                else:
+                    logger.warning("텍스트 미리보기 패널의 데이터를 가져올 수 없습니다.")
+            
+            # 파일 저장 다이얼로그
+            options = QFileDialog.Options()
+            file_path, _ = QFileDialog.getSaveFileName(
+                self, 
+                "결과 저장", 
+                f"{item_text}.csv", 
+                "CSV 파일 (*.csv);;Excel 파일 (*.xlsx);;JSON 파일 (*.json)",
+                options=options
+            )
+            
+            if not file_path:
+                logger.info("파일 저장이 취소되었습니다")
+                return
+                
+            # 저장 디렉토리 확인
+            os.makedirs(os.path.dirname(os.path.abspath(file_path)), exist_ok=True)
+            
+            # 파일 확장자 추출
+            file_ext = os.path.splitext(file_path)[1].lower()
+            
+            # 주관식 텍스트 데이터 내보내기
+            if is_text_data and text_df is not None:
+                logger.info("주관식 텍스트 데이터 내보내기 처리 중...")
+                
+                # 파일 형식별 저장
+                if file_ext == '.csv':
+                    text_df.to_csv(file_path, index=False, encoding='utf-8-sig')
+                    logger.info(f"텍스트 데이터 CSV 파일로 저장됨: {file_path}")
+                elif file_ext == '.xlsx':
+                    text_df.to_excel(file_path, index=False, sheet_name=item_text[:31])  # 시트 이름 제한
+                    logger.info(f"텍스트 데이터 Excel 파일로 저장됨: {file_path}")
+                elif file_ext == '.json':
+                    # JSON 파일로 저장
+                    text_json = text_df.to_dict(orient='records')
+                    with open(file_path, 'w', encoding='utf-8') as f:
+                        json.dump(text_json, f, ensure_ascii=False, indent=2)
+                    logger.info(f"텍스트 데이터 JSON 파일로 저장됨: {file_path}")
+                else:
+                    logger.error(f"지원되지 않는 파일 형식: {file_ext}")
+                
+                # 성공적인 내보내기 후 반환
+                return
+            
+            # 일반 테이블 데이터 내보내기 (기존 로직)
+            # 테이블 데이터를 데이터프레임으로 변환
+            header = self.result_table_model.header_labels
+            data = self.result_table_model.table_data
+            
+            if not data:
+                logger.warning("내보낼 데이터가 없습니다")
+                return
+                
+            # 데이터프레임 생성
+            df = pd.DataFrame(data, columns=header)
+            
+            # 파일 형식별 저장
+            if file_ext == '.csv':
+                df.to_csv(file_path, index=False, encoding='utf-8-sig')
+                logger.info(f"CSV 파일로 저장됨: {file_path}")
+            elif file_ext == '.xlsx':
+                df.to_excel(file_path, index=False, sheet_name=item_text[:31])  # 시트 이름 제한
+                logger.info(f"Excel 파일로 저장됨: {file_path}")
+            elif file_ext == '.json':
+                # JSON 파일로 저장
+                with open(file_path, 'w', encoding='utf-8') as f:
+                    json.dump(data, f, ensure_ascii=False, indent=2)
+                logger.info(f"JSON 파일로 저장됨: {file_path}")
+            else:
+                logger.error(f"지원되지 않는 파일 형식: {file_ext}")
+                
+        except Exception as e:
+            logger.error(f"결과 내보내기 중 오류: {str(e)}")
+            # 오류 추적 정보 로깅
+            import traceback
+            traceback_info = traceback.format_exc()
+            logger.error(f"결과 내보내기 오류 추적: {traceback_info}")
+
+    def displayCorrelationMatrix(self, data, title):
+        """상관관계 행렬 테이블 표시
+        
+        Args:
+            data: 상관관계 데이터 (DataFrame 또는 딕셔너리)
+            title: 표시할 제목
+        """
+        try:
+            logger.info(f"상관관계 행렬 표시: {title}")
+            
+            # 상관관계 데이터가 DataFrame인 경우
+            if isinstance(data, pd.DataFrame):
+                logger.info(f"DataFrame 상관관계 행렬 처리: {data.shape}")
+                
+                # 헤더 행 준비
+                header_row = ["변수"] + list(data.columns)
+                
+                # 데이터 행 준비
+                data_rows = []
+                for idx, row in data.iterrows():
+                    row_data = [idx]  # 행 이름
+                    for col in data.columns:
+                        try:
+                            val = row[col]
+                            if isinstance(val, float):
+                                val = round(val, 3)  # 소수점 3자리로 반올림
+                            row_data.append(val)
+                        except:
+                            row_data.append("N/A")
+                    data_rows.append(row_data)
+                
+                # 테이블 모델 업데이트
+                self.result_table_model.update_stats(title, [header_row] + data_rows)
+                self.result_detail_label.setText(f"{len(data.columns)}개 변수 간 상관관계")
+                
+            # 딕셔너리로 이미 변환된 상관관계 행렬인 경우
+            elif isinstance(data, dict) and "header" in data and "data" in data:
+                logger.info("사전 변환된 상관관계 행렬 처리")
+                self.result_table_model.update_stats(title, [data["header"]] + data["data"])
+                self.result_detail_label.setText(f"{len(data['header'])-1}개 변수 간 상관관계")
+                
+            # 그 외 딕셔너리 형태의 데이터인 경우
+            elif isinstance(data, dict):
+                logger.info("일반 딕셔너리 상관관계 데이터 처리")
+                self.result_table_model.update_stats(title, data)
+                self.result_detail_label.setText(f"{len(data)}개 항목")
+                
+            # 결과 설명 업데이트
+            self.result_description.setText("변수 간 상관관계를 나타내는 행렬입니다. 값이 1에 가까울수록 강한 양의 상관관계, -1에 가까울수록 강한 음의 상관관계입니다.")
+                
+        except Exception as e:
+            logger.error(f"상관관계 행렬 표시 중 오류: {str(e)}")
+            import traceback
+            logger.error(traceback.format_exc())
+            self.result_table_model.update_stats("오류", [("오류", str(e))])
+            
+    def displayDataFrame(self, df, title):
+        """데이터프레임 테이블 표시
+        
+        Args:
+            df: 표시할 데이터프레임
+            title: 표시할 제목
+        """
+        try:
+            if df is None or df.empty:
+                logger.warning("표시할 데이터프레임이 비어 있습니다")
+                self.result_table_model.update_stats(title, [("정보", "데이터가 없습니다")])
+                return
+                
+            logger.info(f"데이터프레임 표시: {df.shape}, 제목: {title}")
+            
+            # 헤더 행 준비
+            header_row = ["인덱스"] + list(df.columns)
+            
+            # 데이터 행 준비
+            data_rows = []
+            for idx, row in df.iterrows():
+                row_data = [str(idx)]  # 인덱스
+                for col in df.columns:
+                    try:
+                        val = row[col]
+                        # 값 형식에 따라 적절히 변환
+                        if isinstance(val, float):
+                            val = round(val, 3)  # 소수점 3자리로 반올림
+                        elif isinstance(val, np.ndarray):
+                            val = str(val)  # 배열은 문자열로 변환
+                        row_data.append(val)
+                    except Exception as e:
+                        logger.warning(f"데이터프레임 값 변환 중 오류: {str(e)}")
+                        row_data.append("N/A")
+                data_rows.append(row_data)
+                
+            # 테이블 모델 업데이트
+            self.result_table_model.update_stats(title, [header_row] + data_rows)
+            
+            # 세부 정보 및 설명 업데이트
+            self.result_detail_label.setText(f"{df.shape[0]}행 × {df.shape[1]}열")
+            self.result_description.setText(f"데이터프레임 정보: {df.info()}")
+            
+        except Exception as e:
+            logger.error(f"데이터프레임 표시 중 오류: {str(e)}")
+            import traceback
+            logger.error(traceback.format_exc())
+            self.result_table_model.update_stats("오류", [("오류", str(e))])
+
+    def visualizeTextColumn(self, dataframe):
+        """주관식 텍스트 열 시각화 요청 처리
+        
+        Args:
+            dataframe: 텍스트 데이터가 포함된 데이터프레임
+        """
+        try:
+            logger.info(f"텍스트 열 시각화 요청: {dataframe.shape}")
+            
+            # 시각화 요청 발생
+            self.visualizeRequested.emit("text", {"dataframe": dataframe})
+        except Exception as e:
+            logger.error(f"텍스트 시각화 요청 중 오류: {str(e)}")
+            import traceback
+            logger.error(traceback.format_exc())
+
+    def update_stats(self, stats_type, result):
+        """결과 데이터 업데이트"""
+        self.results = []
+        
+        # 결과가 이미 2열로 구성된 튜플 또는 리스트 목록인 경우
+        if isinstance(result, list) and all(isinstance(item, (tuple, list)) and len(item) == 2 for item in result):
+            self.results = result
+        # 결과가 딕셔너리인 경우
+        elif isinstance(result, dict):
+            for key, value in result.items():
+                if isinstance(value, dict):
+                    for sub_key, sub_value in value.items():
+                        self.results.append((f"{key} - {sub_key}", sub_value))
+                else:
+                    self.results.append((key, value))
+        elif isinstance(result, list):
+            for i, item in enumerate(result):
+                self.results.append((f"항목 {i+1}", item))
+        else:
+            self.results.append(("결과", result))
+        
+        # 내보내기용 테이블 데이터 업데이트
+        self.table_data = [list(row) for row in self.results]
+            
+        self.layoutChanged.emit()
+        self.logger.info(f"{stats_type} 결과 테이블 업데이트: {len(self.results)}개 항목")
+
+    def initializeWithData(self, dataframe):
+        """데이터프레임으로 초기화"""
+        if self.analysis_engine is None:
+            from src.core.analysis_engine import AnalysisEngine
+            self.analysis_engine = AnalysisEngine()
+        
+        self.analysis_engine.set_dataframe(dataframe)
+        self.updateResults()
+        
+    def updateResults(self):
+        """분석 결과 업데이트"""
+        if not self.analysis_engine:
+            logger.error("분석 엔진이 설정되지 않았습니다")
+            return
+            
+        # 현재 분석 결과 가져오기
+        self.current_results = self.analysis_engine.get_all_results()
+        
+        # 로그 기록
+        try:
+            os.makedirs("logs", exist_ok=True)
+            with open("logs/results_update.log", "a", encoding="utf-8") as log_file:
+                log_file.write("\n===== 분석 결과 업데이트 =====\n")
+                log_file.write(f"결과 타입: {type(self.current_results).__name__}\n")
+                log_file.write(f"결과 키: {list(self.current_results.keys())}\n")
+                
+                # 각 최상위 결과에 대한 세부 정보 기록
+                for key, value in self.current_results.items():
+                    log_file.write(f"\n- 결과 키: {key}, 값 타입: {type(value).__name__}\n")
+                    if isinstance(value, dict):
+                        log_file.write(f"  서브키 목록: {list(value.keys())}\n")
+                        
+                        # 몇 개의 샘플 서브키 값 기록
+                        sample_keys = list(value.keys())[:3]  # 최대 3개
+                        for sub_key in sample_keys:
+                            sub_value = value[sub_key]
+                            log_file.write(f"  - 서브키: {sub_key}, 값 타입: {type(sub_value).__name__}\n")
+        except Exception as e:
+            logger.error(f"결과 업데이트 로깅 중 오류: {str(e)}")
+        
+        # 결과 트리 모델 업데이트
+        self.tree_model.clear()
+        root = self.tree_model.invisibleRootItem()
+        
+        # 분석 타입별로 처리
+        analysis_type = self.analysis_combo.currentText()
+        
+        if not self.current_results:
+            # 결과가 없는 경우
+            no_result_item = QStandardItem("결과 없음")
+            no_result_item.setEnabled(False)
+            root.appendRow(no_result_item)
+            logger.warning("분석 결과가 없습니다")
+            return
+            
+        # 결과 타입 한글화 매핑
+        result_type_labels = {
+            'basic_stats': '기본 통계',
+            'numeric_stats': '수치형 통계',
+            'categorical_stats': '범주형 통계',
+            'correlation': '상관관계 분석',
+            'strong_correlations': '강한 상관관계',
+            'group_analysis': '그룹별 분석',
+            'missing_values': '결측치 분석',
+            'text_analysis': '주관식 텍스트 분석',
+            'outliers': '이상치 분석',
+            'time_series': '시계열 분석'
+        }
+            
+        # 결과 타입 목록 정렬
+        result_types = sorted(self.current_results.keys())
+        
+        for result_type in result_types:
+            result_data = self.current_results[result_type]
+            
+            # 결과 타입에 맞는 아이템 생성 (한글 레이블 사용)
+            display_name = result_type_labels.get(result_type, result_type)
+            type_item = QStandardItem(display_name)
+            
+            # 데이터 경로 설정 (트리 항목에 저장되어 나중에 결과를 찾는 데 사용)
+            type_item.setData(result_type, Qt.UserRole)
+            
+            # 결과 데이터 유형에 따라 다른 처리
+            if isinstance(result_data, dict) and result_data:
+                # 딕셔너리 타입 결과는 하위 항목으로 표시
+                # 결과 하위 항목 정렬 (일관된 표시를 위해)
+                sorted_keys = sorted(result_data.keys())
+                
+                for key in sorted_keys:
+                    sub_data = result_data[key]
+                    sub_item = QStandardItem(str(key))
+                    
+                    # 하위 항목 데이터 경로 설정 (상위.하위 형식)
+                    sub_item.setData(f"{result_type}.{key}", Qt.UserRole)
+                    
+                    # 하위 항목에 실제 데이터 설정 - 명시적 형변환 추가
+                    if key == "numeric_columns" or key == "categorical_columns":
+                        # 리스트 항목을 확실하게 데이터로 설정
+                        logger.info(f"리스트 항목 추가: {key}, 항목 수: {len(sub_data) if isinstance(sub_data, list) else 'N/A'}")
+                        sub_item.setData(sub_data, Qt.UserRole + 1)
+                    else:
+                        sub_item.setData(sub_data, Qt.UserRole + 1)
+                    
+                    # 하위 항목 추가
+                    type_item.appendRow(sub_item)
+                    
+                    # 디버그 로깅
+                    logger.debug(f"결과 하위 항목 추가: {key}, 데이터 경로: {result_type}.{key}")
+            
+            # 최상위 항목 추가
+            root.appendRow(type_item)
+            
+            # 최상위 항목에 실제 데이터 설정
+            type_item.setData(result_data, Qt.UserRole + 1)
+            
+            # 디버그 로깅
+            logger.debug(f"결과 최상위 항목 추가: {result_type}")
+            
+        # 결과 트리 확장
+        self.result_tree.expandAll()
+        
+        # 결과 테이블 초기화
+        self.result_table_model.load_data(None)
+        self.result_table_model.layoutChanged.emit()
+        
+        # 상태 메시지 업데이트
+        result_count = len(self.current_results)
+        logger.info(f"{result_count}개의 분석 결과가 로드되었습니다")
+        
+    def runAnalysis(self):
+        """선택한 분석 유형 실행"""
+        if not self.analysis_engine:
+            return
+            
+        analysis_type = self.analysis_combo.currentText()
+        
+        try:
+            # 모든 분석 유형에 대해 analyze 메서드 사용
+            if self.analysis_engine.df is not None:
+                self.analysis_engine.analyze(self.analysis_engine.df)
+                # 결과 업데이트
+                self.updateResults()
+                
+                # 첫 번째 결과 항목 자동 선택
+                first_index = self.tree_model.index(0, 0)
+                if first_index.isValid():
+                    self.result_tree.setCurrentIndex(first_index)
+                    self.onResultItemClicked(first_index)
+            else:
+                print("분석할 데이터가 없습니다.")
+            
+        except Exception as e:
+            print(f"분석 실행 중 오류: {str(e)}")
+
+class AnalysisView(QWidget):
+    """분석 결과 화면"""
+    
+    # 시각화 요청 시그널 정의
+    visualizeRequested = pyqtSignal(str, dict)
+    
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.analysis_engine = None
+        self.current_results = {}
+        self.current_selection = None
+        
+        # 모델 초기화
+        self.tree_model = QStandardItemModel()
+        self.result_table_model = ResultTableModel()
+        
+        self.initUI()
+    
+    def initUI(self):
+        """UI 요소 초기화"""
+        # 메인 레이아웃
+        main_layout = QVBoxLayout()
+        
+        # 상단 패널
+        top_panel = QHBoxLayout()
+        
+        # 분석 유형 선택 콤보박스
+        self.analysis_combo = QComboBox()
+        self.analysis_combo.addItem("기본 통계 분석")
+        self.analysis_combo.addItem("상관 관계 분석")
+        self.analysis_combo.addItem("그룹별 분석")
+        self.analysis_combo.addItem("결측치 분석")
+        self.analysis_combo.addItem("텍스트 분석")
+        
+        # 분석 실행 버튼
+        self.analyze_button = QPushButton("분석 실행")
+        self.analyze_button.clicked.connect(self.runAnalysis)
+        
+        # 내보내기 버튼
+        self.export_button = QPushButton("내보내기")
+        self.export_button.clicked.connect(self.exportResults)
+        self.export_button.setEnabled(False)  # 처음에는 비활성화
+        
+        # 새로고침 버튼
+        self.refresh_button = QPushButton("새로고침")
+        self.refresh_button.clicked.connect(self.updateResults)
+        
+        # 상단 패널에 위젯 추가
+        top_panel.addWidget(QLabel("분석 유형:"))
+        top_panel.addWidget(self.analysis_combo)
+        top_panel.addWidget(self.analyze_button)
+        top_panel.addWidget(self.refresh_button)
+        top_panel.addWidget(self.export_button)
+        top_panel.addStretch()
+        
+        # 메인 레이아웃에 상단 패널 추가
+        main_layout.addLayout(top_panel)
+        
+        # 결과 패널 (스플리터 사용)
+        splitter = QSplitter(Qt.Horizontal)
+        splitter.setHandleWidth(1)
+        
+        # 왼쪽 패널 (결과 트리)
+        left_panel = QWidget()
+        left_layout = QVBoxLayout(left_panel)
+        left_layout.setContentsMargins(0, 0, 0, 0)
+        
+        # 결과 트리 설정
+        self.result_tree = QTreeView()
+        self.result_tree.setModel(self.tree_model)
+        self.result_tree.setHeaderHidden(True)
+        self.result_tree.clicked.connect(self.onResultItemClicked)
+        self.result_tree.selectionModel().selectionChanged.connect(self.onResultItemSelected)
+        
+        left_layout.addWidget(QLabel("분석 결과:"))
+        left_layout.addWidget(self.result_tree)
+        
+        # 오른쪽 패널 (결과 상세)
+        right_panel = QWidget()
+        right_layout = QVBoxLayout(right_panel)
+        right_layout.setContentsMargins(0, 0, 0, 0)
+        
+        # 결과 제목 및 설명
+        self.result_title = QLabel("결과를 선택하세요")
+        self.result_title.setStyleSheet("font-size: 14px; font-weight: bold;")
+        self.result_description = QLabel("")
+        self.result_description.setWordWrap(True)
+        self.result_detail_label = QLabel("")
+        
+        # 결과 테이블 설정
+        self.result_table = QTableView()
+        self.result_table.setModel(self.result_table_model)
+        self.result_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
+        self.result_table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
+        
+        # 테이블 스타일 설정
+        self.result_table.setAlternatingRowColors(True)
+        self.result_table.setSelectionBehavior(QTableView.SelectRows)
+        self.result_table.setSelectionMode(QTableView.SingleSelection)
+        self.result_table.verticalHeader().setVisible(False)
+        self.result_table.horizontalHeader().setStretchLastSection(True)
+        
+        # 주관식 텍스트 미리보기 패널
+        self.text_preview_panel = TextPreviewPanel()
+        self.text_preview_panel.hide()  # 처음에는 숨김
+        
+        # 오른쪽 패널에 위젯 추가
+        right_layout.addWidget(self.result_title)
+        right_layout.addWidget(self.result_description)
+        right_layout.addWidget(self.result_detail_label)
+        right_layout.addWidget(self.result_table)
+        right_layout.addWidget(self.text_preview_panel)
+        
+        # 스플리터에 패널 추가
+        splitter.addWidget(left_panel)
+        splitter.addWidget(right_panel)
+        splitter.setSizes([200, 600])  # 초기 사이즈 설정
+        
+        # 메인 레이아웃에 스플리터 추가
+        main_layout.addWidget(splitter)
+        
+        # 메인 레이아웃 설정
+        self.setLayout(main_layout)

@@ -250,40 +250,40 @@ class AnalysisEngine:
                 
                 # 기본 통계량
                 stats = {
-                    'count': int(col_data.count()),
-                    'missing': int(self.df[col].isna().sum()),
-                    'missing_pct': float(round(self.df[col].isna().mean() * 100, 2)),
-                    'mean': float(col_data.mean()),
-                    'median': float(col_data.median()),
-                    'std': float(col_data.std()),
-                    'var': float(col_data.var()),
-                    'min': float(col_data.min()),
-                    'max': float(col_data.max()),
-                    'range': float(col_data.max() - col_data.min()),
-                    'unique_values': int(col_data.nunique())
+                    '개수': int(col_data.count()),
+                    '결측값': int(self.df[col].isna().sum()),
+                    '결측률': float(round(self.df[col].isna().mean() * 100, 2)),
+                    '평균': float(col_data.mean()),
+                    '중앙값': float(col_data.median()),
+                    '표준편차': float(col_data.std()),
+                    '분산': float(col_data.var()),
+                    '최소값': float(col_data.min()),
+                    '최대값': float(col_data.max()),
+                    '범위': float(col_data.max() - col_data.min()),
+                    '고유값수': int(col_data.nunique())
                 }
                 
                 # 분위수 계산
                 for q in [0.1, 0.25, 0.5, 0.75, 0.9]:
-                    stats[f'q{int(q*100)}'] = float(col_data.quantile(q))
+                    stats[f'분위수_{int(q*100)}%'] = float(col_data.quantile(q))
                 
                 # 왜도와 첨도 계산
                 try:
-                    stats['skew'] = float(col_data.skew())
-                    stats['kurtosis'] = float(col_data.kurtosis())
+                    stats['왜도'] = float(col_data.skew())
+                    stats['첨도'] = float(col_data.kurtosis())
                 except:
-                    stats['skew'] = None
-                    stats['kurtosis'] = None
+                    stats['왜도'] = None
+                    stats['첨도'] = None
                 
                 # 히스토그램 구간 정보
                 try:
                     hist_values, hist_bins = np.histogram(col_data, bins=10)
-                    stats['histogram'] = {
-                        'values': hist_values.tolist(),
-                        'bins': hist_bins.tolist()
+                    stats['히스토그램'] = {
+                        '빈도': hist_values.tolist(),
+                        '구간': hist_bins.tolist()
                     }
                 except:
-                    stats['histogram'] = None
+                    stats['히스토그램'] = None
                 
                 # 열별 통계 저장
                 numeric_stats[col] = stats
@@ -340,17 +340,17 @@ class AnalysisEngine:
                     
                     # 결과 저장
                     col_stats = {
-                        'count': total_valid,
-                        'missing': self.df[col].isna().sum(),
-                        'missing_pct': round(self.df[col].isna().mean() * 100, 2),
-                        'unique_values': self.df[col].nunique(),
-                        'top_values': {
+                        '개수': total_valid,
+                        '결측값': self.df[col].isna().sum(),
+                        '결측률': round(self.df[col].isna().mean() * 100, 2),
+                        '고유값수': self.df[col].nunique(),
+                        '상위값': {
                             str(category): {
-                                'count': int(count),
-                                'percentage': float(pct_values.get(category, 0))
+                                '개수': int(count),
+                                '비율': float(pct_values.get(category, 0))
                             } for category, count in top_values.items()
                         },
-                        'data_type': str(self.df[col].dtype)
+                        '데이터타입': str(self.df[col].dtype)
                     }
                     
                     cat_stats[col] = col_stats

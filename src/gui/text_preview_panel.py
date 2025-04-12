@@ -274,6 +274,16 @@ class TextPreviewPanel(QWidget):
         
         logger.info("텍스트 미리보기 패널 항목이 모두 제거되었습니다.")
     
+    def setColumnData(self, column_name, text_data):
+        """텍스트 데이터 설정 (set_text_data와 기능 동일한 API 별칭)
+        
+        Args:
+            column_name (str): 표시할 열 이름
+            text_data (dict): 텍스트 데이터 {'summary': {...}, 'responses': [...]} 또는 {'samples': [...]}
+        """
+        # 기존 메서드 호출
+        self.set_text_data(column_name, text_data)
+    
     def set_text_data(self, column_name, text_data):
         """텍스트 데이터 설정 및 UI 업데이트 (기존 API 호환성 유지)
         
@@ -372,3 +382,45 @@ class TextPreviewPanel(QWidget):
             logger.error(f"text_items 개수: {len(self.text_items) if self.text_items else 0}")
             logger.error("텍스트 항목이 로드되었으나 데이터프레임이 설정되지 않았습니다.")
             QMessageBox.warning(self, "시각화 오류", "시각화할 데이터가 없습니다.")
+
+    def load_text_items(self, responses):
+        """응답 데이터를 패널에 표시하는 메서드
+        
+        Args:
+            responses (List[str]): 텍스트 응답 목록
+        """
+        try:
+            # 유효한 데이터인지 확인
+            if not responses:
+                logger.warning("표시할 응답 목록이 비어 있습니다")
+                return
+                
+            # 응답 수 로깅
+            logger.info(f"'samples' 키에서 {len(responses)}개 항목 추가 (대체 키)")
+            
+            # 데이터프레임 생성
+            if responses:
+                # 유효한 문자열 확인
+                valid_responses = [str(r) if r is not None else "" for r in responses]
+                
+                # 첫 번째 응답의 열 이름으로 사용
+                column_name = "응답" 
+                
+                # 데이터프레임 생성
+                df = pd.DataFrame({column_name: valid_responses})
+                
+                # 응답 항목 표시
+                self.displayTextItems(valid_responses, df)
+                
+                logger.info(f"데이터프레임 생성 완료: {len(valid_responses)}행, 1열")
+                return True
+            else:
+                logger.warning("유효한 응답이 없습니다")
+                self.clearItems()
+                return False
+        except Exception as e:
+            logger.error(f"텍스트 항목 로드 중 오류: {str(e)}")
+            import traceback
+            logger.error(traceback.format_exc())
+            self.clearItems()
+            return False

@@ -11,6 +11,9 @@ from PyQt5.QtCore import Qt, pyqtSignal, QSize
 from PyQt5.QtGui import QPixmap, QImage
 import logging
 
+# VisualizationEngine 임포트 추가
+from src.visualization.visualization_engine import VisualizationEngine
+
 class ImagePanel(QWidget):
     """
     이미지 표시 패널
@@ -163,6 +166,7 @@ class VisualizationView(QWidget):
         """UI 구성 요소 초기화"""
         # 메인 레이아웃
         layout = QVBoxLayout(self)
+        layout.setContentsMargins(10, 10, 10, 10)
         
         # 상단 도구 모음
         top_layout = QHBoxLayout()
@@ -199,31 +203,31 @@ class VisualizationView(QWidget):
         self.all_tab = QWidget()
         self.tab_widget.addTab(self.all_tab, "모든 시각화")
         
-        # 스크롤 영역 생성
+        # 기본 탭 레이아웃
         self.all_scroll = QScrollArea()
         self.all_scroll.setWidgetResizable(True)
+        self.all_scroll_content = QWidget()
+        self.all_layout = QVBoxLayout(self.all_scroll_content)
+        self.all_scroll.setWidget(self.all_scroll_content)
         
-        # 스크롤 영역에 들어갈 컨테이너 위젯
-        self.all_container = QWidget()
-        self.all_scroll.setWidget(self.all_container)
-        
-        # 컨테이너 레이아웃 (플로우 레이아웃 형태)
-        self.all_layout = QVBoxLayout(self.all_container)
-        
-        # 스크롤 영역을 탭에 추가
         all_tab_layout = QVBoxLayout(self.all_tab)
         all_tab_layout.addWidget(self.all_scroll)
         
         # 카테고리별 탭 생성
         self.tabs = {}
-        categories = ["분포", "관계", "시계열", "범주형", "주관식"]
         
-        for category in categories:
-            tab, layout = self.createTab(category)
-            self.tabs[category] = (tab, layout)
+        for category in ["분포", "관계", "시계열", "범주형", "주관식"]:
+            tab_widget, tab_layout = self.createTab(category)
+            self.tabs[category] = (tab_widget, tab_layout)
+            self.tab_widget.addTab(tab_widget, category)
+            
+        # 시각화 엔진 초기화 (MainWindow와 같은 출력 디렉토리 사용)
+        # output_dir = os.path.join(os.getcwd(), "output", "visualizations")
+        output_dir = os.path.join(os.getcwd(), "output", "viz")
+        self.visualization_engine = VisualizationEngine(output_dir)
         
-        # 카테고리 선택 콤보박스 변경 시 탭 변경
-        self.type_combo.currentTextChanged.connect(self.changeVisualizationType)
+        # 초기화 로깅
+        self.logger.info("시각화 뷰 초기화 완료")
         
     def createTab(self, name: str):
         """새 탭 생성"""
@@ -251,11 +255,13 @@ class VisualizationView(QWidget):
         self.visualization_engine = engine
         
     def initializeWithData(self, dataframe):
-        """데이터프레임으로 초기화"""
+        """데이터로 초기화"""
+        # 시각화 엔진이 없으면 생성
         if self.visualization_engine is None:
-            from src.visualization.visualization_engine import VisualizationEngine
-            output_dir = os.path.join(os.getcwd(), "output", "visualizations")
+            # 출력 디렉토리 설정 - MainWindow와 동일한 경로 사용
+            output_dir = os.path.join(os.getcwd(), "output", "viz")
             self.visualization_engine = VisualizationEngine(output_dir)
+            self.logger.info(f"시각화 엔진 초기화 (출력 경로: {output_dir})")
         
         self.visualization_engine.set_dataframe(dataframe)
         self.updateVisualizations()
@@ -266,10 +272,10 @@ class VisualizationView(QWidget):
             return
             
         # 이전 시각화 위젯 제거
-        for category_layout in [layout for _, layout in self.tabs.values()]:
+        for _, layout in self.tabs.values():
             # 모든 위젯 제거
-            while category_layout.count():
-                item = category_layout.takeAt(0)
+            while layout.count():
+                item = layout.takeAt(0)
                 if item.widget():
                     item.widget().deleteLater()
         
@@ -330,7 +336,8 @@ class VisualizationView(QWidget):
                     # 해당 카테고리 탭에 추가
                     category = viz_info['category']
                     if category in self.tabs:
-                        self.tabs[category][1].addWidget(panel)
+                        _, tab_layout = self.tabs[category]
+                        tab_layout.addWidget(panel)
                         
                 # 각 카테고리별 스트레치 추가
                 for _, layout in self.tabs.values():
@@ -341,6 +348,8 @@ class VisualizationView(QWidget):
                 
         except Exception as e:
             QMessageBox.critical(self, "오류", f"시각화 업데이트 중 오류 발생: {str(e)}")
+            import traceback
+            print(traceback.format_exc())
             
     def generateVisualizations(self):
         """시각화 생성"""
@@ -508,7 +517,8 @@ class VisualizationView(QWidget):
             
             # 해당 카테고리 탭에 추가 (없으면 기타 카테고리로)
             if category in self.tabs:
-                self.tabs[category][1].addWidget(panel)
+                _, tab_layout = self.tabs[category]
+                tab_layout.addWidget(panel)
             
             # 시그널 발생
             self.visualizationUpdated.emit()

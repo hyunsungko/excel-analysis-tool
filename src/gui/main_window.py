@@ -601,7 +601,7 @@ class MainWindow(QMainWindow):
             text_analyzer = TextAnalyzer()
             
             # 시각화 결과 저장 디렉토리
-            output_dir = os.path.join(os.getcwd(), 'output')
+            output_dir = os.path.join(os.getcwd(), 'output', 'viz')
             os.makedirs(output_dir, exist_ok=True)
             
             # 각 주관식 열에 대한 시각화 생성
