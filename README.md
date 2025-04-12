@@ -87,7 +87,7 @@ GUI 모드에서의 사용 단계:
 ### 기본 분석 예제
 
 ```python
-from src.core.data_loader import DataLoader
+from src.utils.data_loader import DataLoader
 from src.core.data_processor import DataProcessor
 from src.core.analysis_engine import AnalysisEngine
 from src.visualization.visualization_engine import VisualizationEngine

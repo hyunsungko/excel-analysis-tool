@@ -13,7 +13,7 @@ from pathlib import Path
 # 모듈 경로 추가
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from src.core.data_loader import DataLoader
+from src.utils.data_loader import DataLoader
 from src.core.data_processor import DataProcessor
 from src.core.analysis_engine import AnalysisEngine
 from src.visualization.visualization_engine import VisualizationEngine

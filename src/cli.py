@@ -14,7 +14,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 # 모듈 불러오기
-from src.core.data_loader import DataLoader
+from src.utils.data_loader import DataLoader
 from src.core.data_processor import DataProcessor
 from src.core.analysis_engine import AnalysisEngine
 from src.visualization.visualization_engine import VisualizationEngine

@@ -640,8 +640,10 @@ class AnalysisView(QWidget):
                 except Exception as e:
                     logger.error(f"상관관계 데이터 변환 중 오류: {str(e)}")
                     
-            if not item_data and item_path:
-                # 데이터 경로가 있지만 데이터가 없는 경우 경로를 사용하여 데이터 가져오기
+            # DataFrame은 불리언 컨텍스트에서 평가할 수 없으므로 적절히 처리
+            if ((item_data is None) or 
+                (isinstance(item_data, (list, dict)) and not item_data) or
+                (isinstance(item_data, pd.DataFrame) and item_data.empty)) and item_path:
                 try:
                     path_parts = item_path.split('.')
                     current_data = self.current_results

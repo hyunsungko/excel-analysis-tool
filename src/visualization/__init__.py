@@ -1,10 +1,12 @@
 """
-시각화 모듈: 데이터 시각화 기능을 제공하는 모듈입니다.
+src.visualization 패키지
 
-주요 컴포넌트:
-- VisualizationEngine: 다양한 시각화 백엔드 통합
-- ChartFactory: 차트 유형별 생성 인터페이스
-- ThemeManager: 시각화 테마 및 스타일 관리
+데이터 시각화 관련 모듈을 제공합니다.
 """
+
+from src.visualization.base_visualization import VisualizationEngine
+from src.visualization.font_manager import setup_korean_fonts
+
+__all__ = ['VisualizationEngine', 'setup_korean_fonts']
 
 __version__ = '0.1.0' 

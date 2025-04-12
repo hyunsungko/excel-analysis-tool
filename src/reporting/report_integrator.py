@@ -6,7 +6,7 @@ import pandas as pd
 # 시스템 구성요소 모듈 임포트를 수정합니다
 try:
     # src 모듈에서 직접 임포트 시도
-    from src.core.data_loader import DataLoader
+    from src.utils.data_loader import DataLoader
     from src.core.data_processor import DataProcessor
     from src.core.analysis_engine import AnalysisEngine
     from src.visualization.visualization_engine import VisualizationEngine
@@ -14,14 +14,14 @@ try:
 except ImportError:
     # 상대 경로 임포트 시도
     try:
-        from ..core.data_loader import DataLoader
+        from ..utils.data_loader import DataLoader
         from ..core.data_processor import DataProcessor
         from ..core.analysis_engine import AnalysisEngine
         from ..visualization.visualization_engine import VisualizationEngine
         from .report_engine import ReportEngine
     except ImportError:
         # 절대 경로로 임포트
-        from core.data_loader import DataLoader
+        from utils.data_loader import DataLoader
         from core.data_processor import DataProcessor
         from core.analysis_engine import AnalysisEngine
         from visualization.visualization_engine import VisualizationEngine

@@ -25,13 +25,13 @@ try:
     # 각종 경로에서 모듈 임포트 시도
     try:
         from src.reporting.report_integrator import ReportIntegrator
-        from src.data.data_loader import DataLoader
+        from src.utils.data_loader import DataLoader
         from src.core.data_processor import DataProcessor
         from src.core.analysis_engine import AnalysisEngine
         from src.visualization.visualization_engine import VisualizationEngine
     except ImportError:
         from reporting.report_integrator import ReportIntegrator
-        from data.data_loader import DataLoader
+        from utils.data_loader import DataLoader
         from core.data_processor import DataProcessor
         from core.analysis_engine import AnalysisEngine
         from visualization.visualization_engine import VisualizationEngine
@@ -73,6 +73,75 @@ class DataLoaderThread(QThread):
             
             # 결과 전송
             self.finished.emit(dataframe)
+            
+        except Exception as e:
+            self.error.emit(str(e))
+
+# 파일 저장을 위한 작업자 스레드
+class SaveFileThread(QThread):
+    finished = pyqtSignal(bool)
+    error = pyqtSignal(str)
+    progress = pyqtSignal(int)
+    
+    def __init__(self, dataframe, file_path):
+        super().__init__()
+        self.dataframe = dataframe
+        self.file_path = file_path
+        
+    def run(self):
+        try:
+            # 진행 상황 업데이트
+            self.progress.emit(10)
+            
+            # 파일 확장자에 따라 저장 방식 결정
+            if self.file_path.endswith('.csv'):
+                # CSV 파일 저장
+                self.progress.emit(30)
+                self.dataframe.to_csv(self.file_path, index=False, encoding='utf-8-sig')
+                self.progress.emit(80)
+            else:
+                # Excel 파일 저장
+                self.progress.emit(30)
+                self.dataframe.to_excel(self.file_path, index=False)
+                self.progress.emit(80)
+            
+            # 완료 신호 전송
+            self.progress.emit(100)
+            self.finished.emit(True)
+            
+        except Exception as e:
+            self.error.emit(str(e))
+
+# 데이터 처리를 위한 작업자 스레드
+class DataProcessThread(QThread):
+    finished = pyqtSignal(pd.DataFrame)
+    error = pyqtSignal(str)
+    progress = pyqtSignal(int)
+    
+    def __init__(self, dataframe, processor):
+        super().__init__()
+        self.dataframe = dataframe
+        self.processor = processor
+        
+    def run(self):
+        try:
+            # 진행 상황 업데이트
+            self.progress.emit(10)
+            
+            # 데이터프레임 설정
+            self.processor.set_dataframe(self.dataframe)
+            
+            # 진행 상황 업데이트
+            self.progress.emit(40)
+            
+            # 데이터 처리 실행
+            processed_data = self.processor.process(self.dataframe)
+            
+            # 진행 상황 업데이트
+            self.progress.emit(90)
+            
+            # 완료 신호 전송
+            self.finished.emit(processed_data)
             
         except Exception as e:
             self.error.emit(str(e))
@@ -219,85 +288,104 @@ class MainWindow(QMainWindow):
     def createActions(self):
         """액션 생성"""
         # 파일 메뉴 액션
-        self.open_action = QAction(QIcon.fromTheme("document-open"), "열기", self)
-        self.open_action.setShortcut("Ctrl+O")
-        self.open_action.triggered.connect(self.openFile)
+        self.action_open = QAction("열기(&O)...", self)
+        self.action_open.setShortcut("Ctrl+O")
+        self.action_open.setStatusTip("엑셀 파일 열기")
+        self.action_open.triggered.connect(self.openFile)
         
-        self.save_action = QAction(QIcon.fromTheme("document-save"), "저장", self)
-        self.save_action.setShortcut("Ctrl+S")
-        self.save_action.triggered.connect(self.saveFile)
+        self.action_save = QAction("저장(&S)...", self)
+        self.action_save.setShortcut("Ctrl+S")
+        self.action_save.setStatusTip("파일 저장")
+        self.action_save.triggered.connect(self.saveFile)
         
-        self.exit_action = QAction(QIcon.fromTheme("application-exit"), "종료", self)
-        self.exit_action.setShortcut("Ctrl+Q")
-        self.exit_action.triggered.connect(self.close)
+        self.action_exit = QAction("종료(&X)", self)
+        self.action_exit.setShortcut("Alt+F4")
+        self.action_exit.setStatusTip("프로그램 종료")
+        self.action_exit.triggered.connect(self.close)
         
         # 데이터 메뉴 액션
-        self.process_data_action = QAction("데이터 처리", self)
-        self.process_data_action.triggered.connect(self.processData)
+        self.action_process = QAction("데이터 처리(&P)...", self)
+        self.action_process.setStatusTip("데이터 전처리 수행")
+        self.action_process.triggered.connect(self.processData)
         
         # 분석 메뉴 액션
-        self.analyze_action = QAction("분석 실행", self)
-        self.analyze_action.triggered.connect(self.runAnalysis)
+        self.action_analyze = QAction("분석 실행(&A)", self)
+        self.action_analyze.setStatusTip("데이터 분석 실행")
+        self.action_analyze.triggered.connect(self.runAnalysis)
         
         # 시각화 메뉴 액션
-        self.visualize_action = QAction("시각화 생성", self)
-        self.visualize_action.triggered.connect(self.createVisualizations)
+        self.action_visualize = QAction("시각화 생성(&V)", self)
+        self.action_visualize.setStatusTip("시각화 생성")
+        self.action_visualize.triggered.connect(self.createVisualizations)
         
         # 보고서 메뉴 액션
-        self.generate_report_action = QAction("보고서 생성", self)
-        self.generate_report_action.triggered.connect(self.generateReport)
+        self.action_report = QAction("리포트 생성(&G)", self)
+        self.action_report.setStatusTip("분석 리포트 생성")
+        self.action_report.triggered.connect(self.generateReport)
         
         # 도움말 메뉴 액션
-        self.about_action = QAction("정보", self)
-        self.about_action.triggered.connect(self.showAbout)
+        self.action_about = QAction("정보(&A)...", self)
+        self.action_about.setStatusTip("프로그램 정보")
+        self.action_about.triggered.connect(self.showAbout)
+        
+        # 보기 메뉴
+        self.action_refresh = QAction("새로고침(&R)", self)
+        self.action_refresh.setShortcut("F5")
+        self.action_refresh.setStatusTip("데이터 뷰 새로고침")
         
     def createMenus(self):
-        """메뉴 생성"""
-        # 메뉴바 생성
-        menubar = self.menuBar()
-        
+        """메뉴바 설정"""
         # 파일 메뉴
-        file_menu = menubar.addMenu("파일")
-        file_menu.addAction(self.open_action)
-        file_menu.addAction(self.save_action)
+        file_menu = self.menuBar().addMenu("파일(&F)")
+        file_menu.addAction(self.action_open)
+        file_menu.addAction(self.action_save)
         file_menu.addSeparator()
-        file_menu.addAction(self.exit_action)
+        file_menu.addAction(self.action_exit)
         
-        # 데이터 메뉴
-        data_menu = menubar.addMenu("데이터")
-        data_menu.addAction(self.process_data_action)
+        # 편집 메뉴
+        edit_menu = self.menuBar().addMenu("편집(&E)")
+        edit_menu.addAction(self.action_process)
         
-        # 분석 메뉴
-        analysis_menu = menubar.addMenu("분석")
-        analysis_menu.addAction(self.analyze_action)
+        # 보기 메뉴
+        view_menu = self.menuBar().addMenu("보기(&V)")
+        view_menu.addAction(self.action_refresh)
         
-        # 시각화 메뉴
-        visualization_menu = menubar.addMenu("시각화")
-        visualization_menu.addAction(self.visualize_action)
+        # 설정 메뉴 추가
+        settings_menu = self.menuBar().addMenu("설정(&S)")
         
-        # 보고서 메뉴
-        report_menu = menubar.addMenu("보고서")
-        report_menu.addAction(self.generate_report_action)
+        # 한글 폰트 적용 메뉴 항목 추가
+        self.action_apply_korean_font = QAction("한글 폰트 적용(&K)", self)
+        self.action_apply_korean_font.setStatusTip("한글 폰트를 적용하여 차트와 그래프에 한글이 올바르게 표시되도록 합니다")
+        self.action_apply_korean_font.triggered.connect(self.applyKoreanFont)
+        settings_menu.addAction(self.action_apply_korean_font)
+        
+        # 도구 메뉴
+        tools_menu = self.menuBar().addMenu("도구(&T)")
+        tools_menu.addAction(self.action_analyze)
+        tools_menu.addAction(self.action_visualize)
+        tools_menu.addAction(self.action_report)
         
         # 도움말 메뉴
-        help_menu = menubar.addMenu("도움말")
-        help_menu.addAction(self.about_action)
+        help_menu = self.menuBar().addMenu("도움말(&H)")
+        help_menu.addAction(self.action_about)
         
     def createToolBar(self):
-        """툴바 생성"""
+        """툴바 설정"""
         # 메인 툴바
-        self.toolbar = QToolBar("메인 툴바")
-        self.toolbar.setObjectName("mainToolBar")  # 객체 이름 설정
-        self.toolbar.setIconSize(QSize(24, 24))
-        self.addToolBar(self.toolbar)
+        main_toolbar = self.addToolBar("Main")
+        main_toolbar.setMovable(False)
+        main_toolbar.addAction(self.action_open)
+        main_toolbar.addAction(self.action_save)
+        main_toolbar.addSeparator()
+        main_toolbar.addAction(self.action_process)
+        main_toolbar.addSeparator()
+        main_toolbar.addAction(self.action_analyze)
+        main_toolbar.addAction(self.action_visualize)
+        main_toolbar.addAction(self.action_report)
         
-        # 툴바에 액션 추가
-        self.toolbar.addAction(self.open_action)
-        self.toolbar.addAction(self.save_action)
-        self.toolbar.addSeparator()
-        self.toolbar.addAction(self.analyze_action)
-        self.toolbar.addAction(self.visualize_action)
-        self.toolbar.addAction(self.generate_report_action)
+        # 한글 폰트 적용 버튼 추가
+        main_toolbar.addSeparator()
+        main_toolbar.addAction(self.action_apply_korean_font)
         
     def loadSettings(self):
         """설정 로드"""
@@ -431,25 +519,38 @@ class MainWindow(QMainWindow):
         )
         
         if save_path:
-            try:
-                # 상태 표시줄 업데이트
-                self.status_bar.showMessage(f"파일 저장 중: {save_path}")
-                QApplication.processEvents()
-                
-                # 파일 확장자에 따라 저장 방식 결정
-                df = self.data_view.model.dataframe
-                
-                if save_path.endswith('.csv'):
-                    df.to_csv(save_path, index=False, encoding='utf-8-sig')
-                else:
-                    df.to_excel(save_path, index=False)
-                
-                # 상태 표시줄 업데이트
-                self.status_bar.showMessage(f"파일 저장 완료: {save_path}", 5000)
-                
-            except Exception as e:
-                QMessageBox.critical(self, "파일 저장 오류", f"파일을 저장하는 중 오류가 발생했습니다: {str(e)}")
-                self.status_bar.showMessage("파일 저장 실패", 5000)
+            # 상태 표시줄 업데이트 및 프로그레스 바 표시
+            self.status_bar.showMessage(f"파일 저장 중: {save_path}")
+            self.showProgressBar(True, 0)
+            
+            # 작업자 스레드 생성 및 시작
+            df = self.data_view.model.dataframe
+            self.save_thread = SaveFileThread(df, save_path)
+            
+            # 시그널 연결
+            self.save_thread.progress.connect(self.updateProgress)
+            self.save_thread.finished.connect(lambda success: self.onSaveCompleted(success, save_path))
+            self.save_thread.error.connect(self.onSaveError)
+            
+            # 스레드 시작
+            self.save_thread.start()
+    
+    def onSaveCompleted(self, success, save_path):
+        """파일 저장 완료 시 호출되는 함수"""
+        if success:
+            self.status_bar.showMessage(f"파일 저장 완료: {save_path}", 5000)
+        else:
+            self.status_bar.showMessage("파일 저장 실패", 5000)
+            
+        # 프로그레스 바 완료 및 숨김
+        self.showProgressBar(True, 100)
+        self.showProgressBar(False)
+    
+    def onSaveError(self, error_message):
+        """파일 저장 오류 시 호출되는 함수"""
+        QMessageBox.critical(self, "파일 저장 오류", f"파일을 저장하는 중 오류가 발생했습니다: {error_message}")
+        self.status_bar.showMessage("파일 저장 실패", 5000)
+        self.showProgressBar(False)  # 프로그레스 바 숨김
                 
     def processData(self):
         """데이터 처리"""
@@ -470,17 +571,34 @@ class MainWindow(QMainWindow):
             # process_dialog = DataProcessDialog(self, original_data)
             # if process_dialog.exec_() != QDialog.Accepted:
             #     return
+            
+            # 상태 표시줄 업데이트 및 프로그레스 바 표시
+            self.status_bar.showMessage("데이터 처리 중...")
+            self.showProgressBar(True, 0)
                 
             # 데이터 프로세서 초기화
             if not self.integrator.data_processor:
                 self.integrator.data_processor = DataProcessor()
                 
-            # 데이터 설정
-            self.integrator.data_processor.set_dataframe(original_data)
+            # 작업자 스레드 생성 및 시작
+            self.process_thread = DataProcessThread(original_data, self.integrator.data_processor)
             
-            # 기본 처리 수행
-            processed_data = self.integrator.data_processor.process(original_data)
+            # 시그널 연결
+            self.process_thread.progress.connect(self.updateProgress)
+            self.process_thread.finished.connect(self.onProcessCompleted)
+            self.process_thread.error.connect(self.onProcessError)
             
+            # 스레드 시작
+            self.process_thread.start()
+            
+        except Exception as e:
+            QMessageBox.critical(self, "처리 오류", f"데이터 처리 준비 중 오류 발생: {str(e)}")
+            self.status_bar.showMessage("데이터 처리 실패")
+            self.showProgressBar(False)
+            
+    def onProcessCompleted(self, processed_data):
+        """데이터 처리 완료 시 호출되는 함수"""
+        try:
             # 결과 보여주기
             self.data_view.setData(processed_data)
             
@@ -489,60 +607,21 @@ class MainWindow(QMainWindow):
             self.visualization_view.initializeWithData(processed_data)
             
             # 상태 업데이트
-            self.status_bar.showMessage("데이터 처리 완료")
+            self.status_bar.showMessage("데이터 처리 완료", 5000)
+            
+            # 프로그레스 바 완료 및 숨김
+            self.showProgressBar(True, 100)
+            self.showProgressBar(False)
             
         except Exception as e:
-            QMessageBox.critical(self, "처리 오류", f"데이터 처리 중 오류 발생: {str(e)}")
-            self.status_bar.showMessage("데이터 처리 실패")
+            QMessageBox.critical(self, "처리 오류", f"처리 결과 표시 중 오류 발생: {str(e)}")
+            self.status_bar.showMessage("데이터 처리 결과 표시 실패", 5000)
+            self.showProgressBar(False)
             
-    def runAnalysis(self):
-        """분석 실행 함수"""
-        if not self.current_file_path:
-            QMessageBox.warning(self, "분석 오류", "분석할 데이터가 로드되지 않았습니다.")
-            return
-
-        if not self.data_view.model or self.data_view.model.dataframe is None:
-            QMessageBox.warning(self, "분석 오류", "분석할 데이터가 없습니다.")
-            return
-        
-        # 상태 표시줄 업데이트 및 프로그레스 바 표시
-        self.status_bar.showMessage("데이터 분석 중...")
-        self.showProgressBar(True, 0)
-        
-        # 분석할 데이터프레임 가져오기
-        df = self.data_view.model.dataframe
-        
-        # 작업자 스레드 생성 및 시작
-        if self.analysis_view.analysis_engine is None:
-            from src.core.analysis_engine import AnalysisEngine
-            self.analysis_view.analysis_engine = AnalysisEngine()
-            
-        self.analysis_thread = AnalysisThread(df, self.analysis_view.analysis_engine)
-        
-        # 시그널 연결
-        self.analysis_thread.progress.connect(self.updateProgress)
-        self.analysis_thread.finished.connect(self.onAnalysisFinished)
-        self.analysis_thread.error.connect(self.onAnalysisError)
-        
-        # 스레드 시작
-        self.analysis_thread.start()
-    
-    def onAnalysisFinished(self):
-        """분석 완료 시 호출되는 함수"""
-        # 결과 업데이트
-        self.analysis_view.updateResults()
-        
-        # 상태 표시줄 업데이트
-        self.status_bar.showMessage("데이터 분석 완료", 5000)
-        
-        # 프로그레스 바 완료 및 숨김
-        self.showProgressBar(True, 100)
-        self.showProgressBar(False)
-    
-    def onAnalysisError(self, error_message):
-        """분석 오류 시 호출되는 함수"""
-        QMessageBox.critical(self, "분석 오류", f"분석 중 오류가 발생했습니다: {error_message}")
-        self.status_bar.showMessage("데이터 분석 실패", 5000)
+    def onProcessError(self, error_message):
+        """데이터 처리 오류 시 호출되는 함수"""
+        QMessageBox.critical(self, "데이터 처리 오류", f"데이터 처리 중 오류가 발생했습니다: {error_message}")
+        self.status_bar.showMessage("데이터 처리 실패", 5000)
         self.showProgressBar(False)  # 프로그레스 바 숨김
     
     def updateProgress(self, value):
@@ -813,6 +892,95 @@ class MainWindow(QMainWindow):
         self.progress_bar.setVisible(visible)
         self.progress_bar.setValue(value)
         QApplication.processEvents()  # UI 업데이트
+
+    def runAnalysis(self):
+        """분석 실행 함수"""
+        if not self.current_file_path:
+            QMessageBox.warning(self, "분석 오류", "분석할 데이터가 로드되지 않았습니다.")
+            return
+
+        if not self.data_view.model or self.data_view.model.dataframe is None:
+            QMessageBox.warning(self, "분석 오류", "분석할 데이터가 없습니다.")
+            return
+        
+        # 상태 표시줄 업데이트 및 프로그레스 바 표시
+        self.status_bar.showMessage("데이터 분석 중...")
+        self.showProgressBar(True, 0)
+        
+        # 분석할 데이터프레임 가져오기
+        df = self.data_view.model.dataframe
+        
+        # 작업자 스레드 생성 및 시작
+        if self.analysis_view.analysis_engine is None:
+            from src.core.analysis_engine import AnalysisEngine
+            self.analysis_view.analysis_engine = AnalysisEngine()
+            
+        self.analysis_thread = AnalysisThread(df, self.analysis_view.analysis_engine)
+        
+        # 시그널 연결
+        self.analysis_thread.progress.connect(self.updateProgress)
+        self.analysis_thread.finished.connect(self.onAnalysisFinished)
+        self.analysis_thread.error.connect(self.onAnalysisError)
+        
+        # 스레드 시작
+        self.analysis_thread.start()
+    
+    def onAnalysisFinished(self):
+        """분석 완료 시 호출되는 함수"""
+        # 결과 업데이트
+        self.analysis_view.updateResults()
+        
+        # 상태 표시줄 업데이트
+        self.status_bar.showMessage("데이터 분석 완료", 5000)
+        
+        # 프로그레스 바 완료 및 숨김
+        self.showProgressBar(True, 100)
+        self.showProgressBar(False)
+        
+    def onAnalysisError(self, error_message):
+        """분석 오류 시 호출되는 함수"""
+        QMessageBox.critical(self, "분석 오류", f"분석 중 오류가 발생했습니다: {error_message}")
+        self.status_bar.showMessage("데이터 분석 실패", 5000)
+        self.showProgressBar(False)  # 프로그레스 바 숨김
+
+    def applyKoreanFont(self):
+        """한글 폰트 적용 메서드"""
+        try:
+            from src.visualization.visualization_engine import configure_korean_font, reset_font_cache
+            
+            # 진행 상태 표시
+            self.status_bar.showMessage("한글 폰트 설정 중...")
+            self.progress_bar.setVisible(True)
+            self.progress_bar.setValue(10)
+            
+            # 폰트 캐시 초기화
+            self.progress_bar.setValue(30)
+            reset_font_cache()
+            
+            # 한글 폰트 설정
+            self.progress_bar.setValue(60)
+            result = configure_korean_font()
+            
+            self.progress_bar.setValue(100)
+            
+            # 결과 메시지 표시
+            if result:
+                QMessageBox.information(self, "폰트 설정 완료", 
+                    "한글 폰트가 성공적으로 적용되었습니다.\n시각화 생성 시 한글이 올바르게 표시됩니다.")
+                self.status_bar.showMessage("한글 폰트 설정 완료", 5000)
+            else:
+                QMessageBox.warning(self, "폰트 설정 실패", 
+                    "한글 폰트를 적용하는 데 문제가 발생했습니다.\n한글 폰트가 시스템에 설치되어 있는지 확인하세요.")
+                self.status_bar.showMessage("한글 폰트 설정 실패", 5000)
+            
+            # 프로그레스 바 숨김
+            self.progress_bar.setVisible(False)
+            
+        except Exception as e:
+            self.progress_bar.setVisible(False)
+            self.status_bar.showMessage("한글 폰트 설정 오류", 5000)
+            QMessageBox.critical(self, "오류", f"한글 폰트 설정 중 오류가 발생했습니다:\n{str(e)}")
+            self.logger.error(f"한글 폰트 설정 오류: {str(e)}")
 
 # 추가: 애플리케이션 실행 함수
 def run():

@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>현대모비스 SW자격시험 Advanced 레벨 SW프로젝트 파일럿테스트 설문지 (응답)_test.xlsx 분석 보고서</title>
+    <style>
+        body {
+            font-family: 'Nanum Gothic', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+            margin-top: 1.5em;
+        }
+        
+        h1 {
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        
+        h2 {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+        
+        .author {
+            text-align: right;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #f5f5f5;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        td {
+            padding: 8px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .visualization {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .visualization img {
+            max-width: 100%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .summary {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.9em;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+        
+        .toc {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        .toc ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        
+        .toc li {
+            margin-bottom: 5px;
+        }
+        
+        .correlation-positive {
+            background-color: #ffcccc;
+        }
+        
+        .correlation-negative {
+            background-color: #ccccff;
+        }
+        
+        @media print {
+            body {
+                max-width: 100%;
+                padding: 0;
+            }
+            
+            .visualization img {
+                max-width: 80%;
+            }
+            
+            @page {
+                margin: 2cm;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>현대모비스 SW자격시험 Advanced 레벨 SW프로젝트 파일럿테스트 설문지 (응답)_test.xlsx 분석 보고서</h1>
+        <div class="subtitle">시트: 응답_rawdata</div>
+        
+        <div class="author">작성자: Excel 분석 시스템</div>
+        
+    </header>
+    
+    
+    <div class="toc">
+        <h2>목차</h2>
+        <ul>
+            
+            <li><a href="#summary">요약 정보</a></li>
+            
+            <li><a href="#data_overview">데이터 개요</a></li>
+            
+            <li><a href="#visualizations">시각화</a></li>
+            
+            <li><a href="#analysis">분석 결과</a></li>
+            
+            <li><a href="#conclusion">결론</a></li>
+            
+        </ul>
+    </div>
+    
+    
+    <div class="content">
+        
+        &lt;section id=&#34;summary&#34; class=&#34;section&#34;&gt;
+            &lt;h2&gt;요약 정보&lt;/h2&gt;
+            &lt;div class=&#34;summary&#34;&gt;
+                &lt;p&gt;이 보고서는 제공된 데이터셋에 대한 분석 결과를 포함하고 있습니다.&lt;/p&gt;
+                &lt;p&gt;데이터 크기: 13 행 x 86 열&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/section&gt;
+        
+        &lt;section id=&#34;data_overview&#34; class=&#34;section&#34;&gt;
+            &lt;h2&gt;데이터 개요&lt;/h2&gt;
+            &lt;h3&gt;데이터 미리보기&lt;/h3&gt;
+            &lt;table border=&#34;1&#34; class=&#34;dataframe table table-striped&#34;&gt;
+  &lt;thead&gt;
+    &lt;tr style=&#34;text-align: right;&#34;&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;응답제출시간&lt;/th&gt;
+      &lt;th&gt;참여여부&lt;/th&gt;
+      &lt;th&gt;1. 업무경력&lt;/th&gt;
+      &lt;th&gt;2-1. 개발 분야 경력&lt;/th&gt;
+      &lt;th&gt;2-2. PL급 이상 경력&lt;/th&gt;
+      &lt;th&gt;3. 국제 표준 업무의 경험 수준&lt;/th&gt;
+      &lt;th&gt;4. 경험한 국제표준(중복)&lt;/th&gt;
+      &lt;th&gt;5. 사용언어&lt;/th&gt;
+      &lt;th&gt;6. 업무영역(중복)&lt;/th&gt;
+      &lt;th&gt;7.소요시간&lt;/th&gt;
+      &lt;th&gt;8. 시험시간 적절성&lt;/th&gt;
+      &lt;th&gt;9-1 체감난이도(출제전반)&lt;/th&gt;
+      &lt;th&gt;9-2 체감난이도(서술)&lt;/th&gt;
+      &lt;th&gt;9-3 난이도 적절성(Advanced로서)&lt;/th&gt;
+      &lt;th&gt;10-1 시나리오(실제상황 연관성)&lt;/th&gt;
+      &lt;th&gt;10-2 시나리오 전반의견&lt;/th&gt;
+      &lt;th&gt;11-1 (과제1) 서술형선택&lt;/th&gt;
+      &lt;th&gt;(11-2) (과제1)서술형 선택 이유&lt;/th&gt;
+      &lt;th&gt;12-1 체감난이도(1번)&lt;/th&gt;
+      &lt;th&gt;12-2 체감난이도(1번)(주관식)&lt;/th&gt;
+      &lt;th&gt;12-3 문항 내용적절성(1번)&lt;/th&gt;
+      &lt;th&gt;13-1. 지식이해 암기 중요도 (1번)&lt;/th&gt;
+      &lt;th&gt;13-2. 자료 해석(분석)중요도 (1번)&lt;/th&gt;
+      &lt;th&gt;13-3. 문제 해결력 (1번)&lt;/th&gt;
+      &lt;th&gt;13-4. 전략적 판단력 (1번)&lt;/th&gt;
+      &lt;th&gt;14-1 (시나리오) project 환경_실무유사도 (1번)&lt;/th&gt;
+      &lt;th&gt;14-2 (시나리오) project 환경_실무유사도(주관식) (1번)&lt;/th&gt;
+      &lt;th&gt;14-3 (시나리오) project 환경_자료활용도 (1번)&lt;/th&gt;
+      &lt;th&gt;14-4 (시나리오) project 환경_자료활용도(주관식) (1번)&lt;/th&gt;
+      &lt;th&gt;15-1 (시나리오) project Architecture_실무유사도 (1번)&lt;/th&gt;
+      &lt;th&gt;15-1 (시나리오) project Architecture_실무유사도(주관식) (1번)&lt;/th&gt;
+      &lt;th&gt;15-3 (시나리오) project Architecture_자료활용도 (1번)&lt;/th&gt;
+      &lt;th&gt;15-4 (시나리오) project Architecture_자료활용도(주관식) (1번)&lt;/th&gt;
+      &lt;th&gt;16-1 (시나리오) 모듈별성능복잡도데이터_실무유사도 (1번)&lt;/th&gt;
+      &lt;th&gt;16-2 (시나리오) 모듈별성능복잡도데이터_실무유사도(주관식) (1번)&lt;/th&gt;
+      &lt;th&gt;16-3 (시나리오) 모듈별성능복잡도데이터_실무유사도 (1번)&lt;/th&gt;
+      &lt;th&gt;15-3 (시나리오) 모듈별성능복잡도데이터_실무유사도(주관식) (1번)&lt;/th&gt;
+      &lt;th&gt;17. 과제1 전반적 의견 (1번)&lt;/th&gt;
+      &lt;th&gt;12-1 체감난이도(1번).1&lt;/th&gt;
+      &lt;th&gt;12-2 체감난이도(1번) (주관식)&lt;/th&gt;
+      &lt;th&gt;12-3 문항 내용적절성 (2번)&lt;/th&gt;
+      &lt;th&gt;13-1. 지식이해 암기 중요도 (2번)&lt;/th&gt;
+      &lt;th&gt;13-2. 자료 해석(분석)중요도 (2번)&lt;/th&gt;
+      &lt;th&gt;13-3. 문제 해결력 (2번)&lt;/th&gt;
+      &lt;th&gt;13-4. 전략적 판단력 (2번)&lt;/th&gt;
+      &lt;th&gt;14-1 (시나리오) project 환경_실무유사도 (2번)&lt;/th&gt;
+      &lt;th&gt;14-2 (시나리오) project 환경_실무유사도(주관식) (2번)&lt;/th&gt;
+      &lt;th&gt;14-3 (시나리오) project 환경_자료활용도 (2번)&lt;/th&gt;
+      &lt;th&gt;14-4 (시나리오) project 환경_자료활용도(주관식) (2번)&lt;/th&gt;
+      &lt;th&gt;15-1 (시나리오) project Architecture_실무유사도 (2번)&lt;/th&gt;
+      &lt;th&gt;15-2 (시나리오) project Architecture_실무유사도(주관식) (2번)&lt;/th&gt;
+      &lt;th&gt;15-3 (시나리오) project Architecture_자료활용도 2번)&lt;/th&gt;
+      &lt;th&gt;15-4 (시나리오) project Architecture_자료활용도(주관식) (2번)&lt;/th&gt;
+      &lt;th&gt;16-1 (시나리오) 모듈별성능복잡도데이터_실무유사도 (2번)&lt;/th&gt;
+      &lt;th&gt;16-2 (시나리오) 모듈별성능복잡도데이터_실무유사도(주관식) (2번)&lt;/th&gt;
+      &lt;th&gt;16-3 (시나리오) 모듈별성능복잡도데이터_실무유사도 (2번)&lt;/th&gt;
+      &lt;th&gt;16-4 (시나리오) 모듈별성능복잡도데이터_실무유사도(주관식) (2번)&lt;/th&gt;
+      &lt;th&gt;17. 과제1 전반적 의견 (2번)&lt;/th&gt;
+      &lt;th&gt;18-1. 과제2_하위문항풀이여부&lt;/th&gt;
+      &lt;th&gt;18-2. 과제2_하위문항풀이여부(주관식)&lt;/th&gt;
+      &lt;th&gt;19-1 체감난이도(3번)&lt;/th&gt;
+      &lt;th&gt;19-2 체감난이도(3번) (주관식)&lt;/th&gt;
+      &lt;th&gt;19-3 문항 내용적절성 (3번)&lt;/th&gt;
+      &lt;th&gt;20-1. 지식이해 암기 중요도 (3번)&lt;/th&gt;
+      &lt;th&gt;20-2. 자료 해석(분석)중요도 (3번)&lt;/th&gt;
+      &lt;th&gt;20-3. 문제 해결력 (3번)&lt;/th&gt;
+      &lt;th&gt;20-4. 전략적 판단력 (3번)&lt;/th&gt;
+      &lt;th&gt;21-1 (시나리오) project 환경_실무유사도 (3번)&lt;/th&gt;
+      &lt;th&gt;21-2 (시나리오) project 환경_실무유사도(주관식) (3번)&lt;/th&gt;
+      &lt;th&gt;21-3 (시나리오) project 환경_자료활용도 (3번)&lt;/th&gt;
+      &lt;th&gt;21-4 (시나리오) project 환경_자료활용도(주관식) (3번)&lt;/th&gt;
+      &lt;th&gt;22-1 (시나리오) Automotive SPICE process reference model_실무유사도 (3번)&lt;/th&gt;
+      &lt;th&gt;22-2 (시나리오) Automotive SPICE process reference model_실무유사도(주관식) (3번)&lt;/th&gt;
+      &lt;th&gt;22-3 (시나리오) Automotive SPICE process reference model_자료활용도 (3번)&lt;/th&gt;
+      &lt;th&gt;22-4 (시나리오) Automotive SPICE process reference model_자료활용도(주관식) (3번)&lt;/th&gt;
+      &lt;th&gt;23. 과제2 전반적 의견 (3번)&lt;/th&gt;
+      &lt;th&gt;24-1. (Essential과 비교) 체감난이도&lt;/th&gt;
+      &lt;th&gt;24-2. (Essential과 비교) 지식이해/암기&lt;/th&gt;
+      &lt;th&gt;24-3. (Essential과 비교) 자료해석&lt;/th&gt;
+      &lt;th&gt;24-4. (Essential과 비교) 문제해결&lt;/th&gt;
+      &lt;th&gt;24-5. (Essential과 비교) 전략적판단&lt;/th&gt;
+      &lt;th&gt;25-1. 성취수준&lt;/th&gt;
+      &lt;th&gt;25-1. 성취수준(주관식)&lt;/th&gt;
+      &lt;th&gt;26. 시험관련 하고싶은 말&lt;/th&gt;
+      &lt;th&gt;성함&lt;/th&gt;
+      &lt;th&gt;사번&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th&gt;0&lt;/th&gt;
+      &lt;td&gt;2025-04-01 14:00:37&lt;/td&gt;
+      &lt;td&gt;예&lt;/td&gt;
+      &lt;td&gt;10년 이상&lt;/td&gt;
+      &lt;td&gt;5년 이상&lt;/td&gt;
+      &lt;td&gt;경험 없음&lt;/td&gt;
+      &lt;td&gt;상급자 지도 하에 보조적 업무 수행 경험 있음&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;C, C++&lt;/td&gt;
+      &lt;td&gt;요구사항 분석, 상세 설계, 코딩/구현, 테스트/검증, 품질 보증&lt;/td&gt;
+      &lt;td&gt;1 days 00:09:08&lt;/td&gt;
+      &lt;td&gt;적절했다&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;내용 자체는 기본 개념이 되는 조건을 만족 시키기 위함을 물어보는것이었느나 별도의 이론적 학습 없이 문제 유형 파악을 위해 응시하였기 때문에 어렵게 느껴지긴 했습니다.&lt;/td&gt;
+      &lt;td&gt;적절함&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;좋습니다&lt;/td&gt;
+      &lt;td&gt;둘 다 풀지 못했음&lt;/td&gt;
+      &lt;td&gt;해당 주제에 관해 막연하게만 알고있고 무언가 의견을 표시할 수 있을정도의 지식이 없어서&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;둘 다 풀지 못했음&lt;/td&gt;
+      &lt;td&gt;아직 해당 주제에 대한 이론적 배경이 부족해서&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;문제 내용을 정확하게 평가할 수 없는 입장이기는 하지만, 문제의 특성상 자유 서술이 되다보니 추후에 정답을 작성하였을때도 채점 결과가 객관적이지 못할것 같다는 생각이 듭니다. (예를들어 특정 항목을 언급하면 +몇점.. 이런식의 객관적인 기준이 없다면... 혹은 이러한 기준이 있다면 문제 제시할때 이러한 기준들에 의거하여.. 와 같이 가이드를 주는게 좋을것 같습니다. 실제 문제 해결을 위한것이 아닌 평가를 위한 것이니까요)&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;8&lt;/td&gt;
+      &lt;td&gt;9&lt;/td&gt;
+      &lt;td&gt;9&lt;/td&gt;
+      &lt;td&gt;9&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+      &lt;td&gt;담당하는 업무에 따라 다르겠지만, 소프트웨어 직군중 일부는 하드웨어와 기본 플랫폼에 대한 검증이 완료된 이후에 기능 구현을 하는 일이 많아서.. 하드웨어-소프트웨어 통합 검증 단계에서 문제 발생하는걸 접할 기회는 적긴합니다. (이 부분을 담당하는 파트도 따로있긴해요)&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+      &lt;td&gt;문제를 못 풀어서 모르겠습니다.&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+      &lt;td&gt;문제를 못 풀어서 모르겠습니다.&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+      &lt;td&gt;문제를 못 풀어서 모르겠습니다.&lt;/td&gt;
+      &lt;td&gt;없습니다.&lt;/td&gt;
+      &lt;td&gt;9&lt;/td&gt;
+      &lt;td&gt;7&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+      &lt;td&gt;80&lt;/td&gt;
+      &lt;td&gt;PL의 경우 상대적으로 이해도가 낮은 PE들을 이끌어 업무를 진행해야하기 때문에&lt;/td&gt;
+      &lt;td&gt;없습니다&lt;/td&gt;
+      &lt;td&gt;박상욱&lt;/td&gt;
+      &lt;td&gt;1622299&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2&lt;/th&gt;
+      &lt;td&gt;2025-04-01 14:08:41&lt;/td&gt;
+      &lt;td&gt;예&lt;/td&gt;
+      &lt;td&gt;5년 이상 ~ 10년 미만&lt;/td&gt;
+      &lt;td&gt;5년 이상&lt;/td&gt;
+      &lt;td&gt;경험 없음&lt;/td&gt;
+      &lt;td&gt;상급자 지도 하에 보조적 업무 수행 경험 있음&lt;/td&gt;
+      &lt;td&gt;기능 안전 (ISO-26262), A-SPICE, 사이버 보안 (ISO/SAE - 21434), AUTOSAR&lt;/td&gt;
+      &lt;td&gt;Embedded C&lt;/td&gt;
+      &lt;td&gt;코딩/구현&lt;/td&gt;
+      &lt;td&gt;1 days 00:29:08&lt;/td&gt;
+      &lt;td&gt;매우 여유로웠다&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;서술형으로 풀기에 다소 어려웠고, 한정적인 단어 위주로 반복 서술해야 한다는 느낌을 받았습니다\n또한 개발자보단 PM이나 CQA, 시스템 업무 담당 등의 업무자에게 더 유리하다는 느낌을 받았습니다&lt;/td&gt;
+      &lt;td&gt;약간 어려움&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;서술형 1 선택&lt;/td&gt;
+      &lt;td&gt;ASPICE, ASIL의 특정 레벨에 준하는 기준들을 명확하게 알고있지 못하여 서술형 1번을 풀었습니다.&lt;/td&gt;
+      &lt;td&gt;4.0&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;3.0&lt;/td&gt;
+      &lt;td&gt;7.0&lt;/td&gt;
+      &lt;td&gt;9.0&lt;/td&gt;
+      &lt;td&gt;7.0&lt;/td&gt;
+      &lt;td&gt;8.0&lt;/td&gt;
+      &lt;td&gt;4.0&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;3.0&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;4.0&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;4.0&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;4.0&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;4.0&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;3-1 문항만 풀었음&lt;/td&gt;
+      &lt;td&gt;해당 프로세스에서 &#34;PM&#34;으로서 해야하는 역할을 알지 못하였습니다.&lt;/td&gt;
+      &lt;td&gt;5&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+      &lt;td&gt;6&lt;/td&gt;
+      &lt;td&gt;6&lt;/td&gt;
+      &lt;td&gt;7&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;다소 추상적인 질문으로 다가왔고, 개발 문제라기 보단 시스템적인 관점이 특히 컸던거 같습니다.\nASICE를 외워야 풀 수 있는 느낌을 받았습니다&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+      &lt;td&gt;9&lt;/td&gt;
+      &lt;td&gt;5&lt;/td&gt;
+      &lt;td&gt;5&lt;/td&gt;
+      &lt;td&gt;0.7&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;권나현&lt;/td&gt;
+      &lt;td&gt;1626163&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;7&lt;/th&gt;
+      &lt;td&gt;2025-04-01 14:22:51&lt;/td&gt;
+      &lt;td&gt;예&lt;/td&gt;
+      &lt;td&gt;10년 이상&lt;/td&gt;
+      &lt;td&gt;5년 이상&lt;/td&gt;
+      &lt;td&gt;경험 없음&lt;/td&gt;
+      &lt;td&gt;경험은 없으나 이론적 지식은 있음&lt;/td&gt;
+      &lt;td&gt;A-SPICE, 사이버 보안 (ISO/SAE - 21434)&lt;/td&gt;
+      &lt;td&gt;C, C++, JAVA&lt;/td&gt;
+      &lt;td&gt;요구사항 분석, 아키텍처 설계, 상세 설계, 코딩/구현&lt;/td&gt;
+      &lt;td&gt;1 days 00:29:08&lt;/td&gt;
+      &lt;td&gt;매우 여유로웠다&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;프로세스에 대한 전반적인 이해 부족&lt;/td&gt;
+      &lt;td&gt;적절함&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;전반적으로 차량안전쪽 시나리오만 있었던 것 같음&lt;/td&gt;
+      &lt;td&gt;둘 다 풀지 못했음&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;3-1 문항만 풀었음&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;A-SPICE 프로세스에 대한 이해 부족&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+      &lt;td&gt;5&lt;/td&gt;
+      &lt;td&gt;7&lt;/td&gt;
+      &lt;td&gt;7&lt;/td&gt;
+      &lt;td&gt;7&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;문제점의 경중과 A-SPICE 지원 프로세스는 크게 관계없다고 생각함&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+      &lt;td&gt;7&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+      &lt;td&gt;0.7&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;이주호&lt;/td&gt;
+      &lt;td&gt;1623409&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;9&lt;/th&gt;
+      &lt;td&gt;2025-04-01 14:25:46&lt;/td&gt;
+      &lt;td&gt;예&lt;/td&gt;
+      &lt;td&gt;5년 이상 ~ 10년 미만&lt;/td&gt;
+      &lt;td&gt;5년 이상&lt;/td&gt;
+      &lt;td&gt;경험 없음&lt;/td&gt;
+      &lt;td&gt;상급자 지도 하에 보조적 업무 수행 경험 있음&lt;/td&gt;
+      &lt;td&gt;기능 안전 (ISO-26262), A-SPICE, 사이버 보안 (ISO/SAE - 21434), AUTOSAR&lt;/td&gt;
+      &lt;td&gt;C, MATLAB / Simulink&lt;/td&gt;
+      &lt;td&gt;상세 설계, 코딩/구현, 테스트/검증&lt;/td&gt;
+      &lt;td&gt;1 days 00:39:08&lt;/td&gt;
+      &lt;td&gt;적절했다&lt;/td&gt;
+      &lt;td&gt;5&lt;/td&gt;
+      &lt;td&gt;A-SPICE나 ISO26262에 대한 기반 지식은 얕은 반면 문제는 해당 내용을 이해하여 어떻게 전략 적으로 접근할 것인가에 대한 서술을 해야 하기 때문에 문제를 어떻게 접근하고 서술해야할지에 대해서 감이 오지 않았음&lt;/td&gt;
+      &lt;td&gt;적절함&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+      &lt;td&gt;시나리오 자체는 이해하기 어렵지 않았음\n다만 기반지식이 깊지 않아 어떠한 프로세스로 문제를 해결해야 할지에 대한 방안을 제시하기 어려웠음&lt;/td&gt;
+      &lt;td&gt;서술형 1 선택&lt;/td&gt;
+      &lt;td&gt;서술형 2의 경우 ASIL D를 달성하기 위한 방안을 제안하라는 내용이 서술의 범위를 어디부터 어디까지 해야하는가에 대해서 답하기 어려웠음&lt;/td&gt;
+      &lt;td&gt;4.0&lt;/td&gt;
+      &lt;td&gt;A-SPICE와 ASIL D 만족을 위한 필요 조건에 대해서 알지 못하여 서술하지 못함&lt;/td&gt;
+      &lt;td&gt;3.0&lt;/td&gt;
+      &lt;td&gt;8.0&lt;/td&gt;
+      &lt;td&gt;7.0&lt;/td&gt;
+      &lt;td&gt;6.0&lt;/td&gt;
+      &lt;td&gt;6.0&lt;/td&gt;
+      &lt;td&gt;4.0&lt;/td&gt;
+      &lt;td&gt;ASIL D를 만족하기 위해 Module의 계층이 어떻게 설정되어야 하는가에 대해서 결정하는 부분들이 실제 SW 개발 프로젝트 환경과 비슷하다 생각함&lt;/td&gt;
+      &lt;td&gt;3.0&lt;/td&gt;
+      &lt;td&gt;현재 상황을 이해하는데 보조 지표로 사용&lt;/td&gt;
+      &lt;td&gt;3.0&lt;/td&gt;
+      &lt;td&gt;큼직한 구조적 개념에서 실제 개발 프로젝트 환경과 크게 다르지 않다고 생각함&lt;/td&gt;
+      &lt;td&gt;4.0&lt;/td&gt;
+      &lt;td&gt;구조를 보고 어떠한 모듈이 필요한지에 대해서 고민해 볼 수 있었기 때문에&lt;/td&gt;
+      &lt;td&gt;3.0&lt;/td&gt;
+      &lt;td&gt;카테고리들이 실제 개발 프로젝트 환경과 크게 다르지 않다고 생각함&lt;/td&gt;
+      &lt;td&gt;4.0&lt;/td&gt;
+      &lt;td&gt;복잡도와 CPU 부하, task type이 해당 모듈의 기능이 정상적으로 동작할 수 있는가에 대한 판단 요소로 작용&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;둘 다 풀지 못했음&lt;/td&gt;
+      &lt;td&gt;A-SPICE에서 각 직무영역들이 어떠한 일을 주로 하는지에 대해서 제대로 인지하고 있지 못했기 때문에&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;A-SPICE에 대한 기반 지식이 부족해서&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;7&lt;/td&gt;
+      &lt;td&gt;6&lt;/td&gt;
+      &lt;td&gt;6&lt;/td&gt;
+      &lt;td&gt;7&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;충분히 나올 수 있는 문제이기 때문에&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;어떠한 상황인지에 대한 이해에 도움이 됨&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;어떠한 프로세스들을 수행할 것 인가에 대한 보기로 사용&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;9&lt;/td&gt;
+      &lt;td&gt;9&lt;/td&gt;
+      &lt;td&gt;6&lt;/td&gt;
+      &lt;td&gt;6&lt;/td&gt;
+      &lt;td&gt;6&lt;/td&gt;
+      &lt;td&gt;70&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;이상우&lt;/td&gt;
+      &lt;td&gt;1626660&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;13&lt;/th&gt;
+      &lt;td&gt;2025-04-01 14:31:26&lt;/td&gt;
+      &lt;td&gt;예&lt;/td&gt;
+      &lt;td&gt;3년 이상 ~ 5년 미만&lt;/td&gt;
+      &lt;td&gt;3년 이상 ~ 5년 미만&lt;/td&gt;
+      &lt;td&gt;경험 없음&lt;/td&gt;
+      &lt;td&gt;경험은 없으나 이론적 지식은 있음&lt;/td&gt;
+      &lt;td&gt;경험 없음&lt;/td&gt;
+      &lt;td&gt;C, C++, Python, Embedded C, Assembly Language(어셈블리어)&lt;/td&gt;
+      &lt;td&gt;코딩/구현&lt;/td&gt;
+      &lt;td&gt;1 days 00:49:08&lt;/td&gt;
+      &lt;td&gt;다소 여유로웠다&lt;/td&gt;
+      &lt;td&gt;5&lt;/td&gt;
+      &lt;td&gt;ISO26262와 A-SPICE가 범위가 방대하며 실무에서 다루어본적이 없어서&lt;/td&gt;
+      &lt;td&gt;약간 어려움&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;실무와 적절하다고 생각&lt;/td&gt;
+      &lt;td&gt;서술형 1 선택&lt;/td&gt;
+      &lt;td&gt;ISO26262와 A-SPICE의 지식이 부족해 2번보단 1번이 쉬워서&lt;/td&gt;
+      &lt;td&gt;4.0&lt;/td&gt;
+      &lt;td&gt;실무와 연관되어 경험해본적이 없어서&lt;/td&gt;
+      &lt;td&gt;4.0&lt;/td&gt;
+      &lt;td&gt;9.0&lt;/td&gt;
+      &lt;td&gt;10.0&lt;/td&gt;
+      &lt;td&gt;10.0&lt;/td&gt;
+      &lt;td&gt;9.0&lt;/td&gt;
+      &lt;td&gt;3.0&lt;/td&gt;
+      &lt;td&gt;실무에서 아키텍처 설계와 관련하여 경험하지 못하여 유사한지 판단 불가능&lt;/td&gt;
+      &lt;td&gt;3.0&lt;/td&gt;
+      &lt;td&gt;1번문제 해결에는 project 환경보단 아키텍처가 조금더 중요한 단서로 작용&lt;/td&gt;
+      &lt;td&gt;3.0&lt;/td&gt;
+      &lt;td&gt;실무에서 아키텍처 설계와 관련하여 경험하지 못하여 유사한지 판단 불가능&lt;/td&gt;
+      &lt;td&gt;5.0&lt;/td&gt;
+      &lt;td&gt;복잡도와 의존성을 파악하기 위해&lt;/td&gt;
+      &lt;td&gt;3.0&lt;/td&gt;
+      &lt;td&gt;실무에서 아키텍처 설계와 관련하여 경험하지 못하여 유사한지 판단 불가능&lt;/td&gt;
+      &lt;td&gt;5.0&lt;/td&gt;
+      &lt;td&gt;자원 활용랑이나 ASIL 레벨 우선순위 같은 부분이 중요하게 활용되서&lt;/td&gt;
+      &lt;td&gt;없음&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;둘 다 풀었음&lt;/td&gt;
+      &lt;td&gt;둘 다 풀어서..?&lt;/td&gt;
+      &lt;td&gt;5&lt;/td&gt;
+      &lt;td&gt;A-Spice의 프로세스와 SW 공학을 응용하는 문제라&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+      &lt;td&gt;직무에서 사용해본적이 없어 모르겠음&lt;/td&gt;
+      &lt;td&gt;5&lt;/td&gt;
+      &lt;td&gt;대응전략과 현재이슈 그리고개발단계라는 정보가 중요했다.&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+      &lt;td&gt;직무에서 사용해본적이 없어 모르겠음&lt;/td&gt;
+      &lt;td&gt;5&lt;/td&gt;
+      &lt;td&gt;답변을 기록하는데 근거가 되는 프로세스들을 확인할 수 있었다&lt;/td&gt;
+      &lt;td&gt;없음&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+      &lt;td&gt;10&lt;/td&gt;
+      &lt;td&gt;60~70%&lt;/td&gt;
+      &lt;td&gt;완벽하게 외워야 맞출수 있는 문제(문제2번)같은 문제도 있기에 어느정도 이론을 알고 실무에서 이러한 내용이 있었지하며 실무에서 이상한 점을 발견하고 알아본 후 문제제기 할 수 있는 정도의 수준이 60~70%정도라고 생각되어&lt;/td&gt;
+      &lt;td&gt;2번같이 외워야하는 문제보단 3번같이 암기보단 응용할 수 있는 문제 위주로 출제가 되었으면 좋겠습니다.&lt;/td&gt;
+      &lt;td&gt;김지민&lt;/td&gt;
+      &lt;td&gt;1630208&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+            &lt;h3&gt;데이터 형식&lt;/h3&gt;
+            &lt;table&gt;
+                &lt;thead&gt;
+                    &lt;tr&gt;
+                        &lt;th&gt;열 이름&lt;/th&gt;
+                        &lt;th&gt;데이터 유형&lt;/th&gt;
+                        &lt;th&gt;결측치&lt;/th&gt;
+                    &lt;/tr&gt;
+                &lt;/thead&gt;
+                &lt;tbody&gt;
+                    &lt;tr&gt;&lt;td&gt;응답제출시간&lt;/td&gt;&lt;td&gt;datetime64[ns]&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;참여여부&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;1. 업무경력&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;2-1. 개발 분야 경력 &lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;2-2. PL급 이상 경력&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;3. 국제 표준 업무의 경험 수준&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;4. 경험한 국제표준(중복)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;5. 사용언어&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;
+6. 업무영역(중복)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;7.소요시간&lt;/td&gt;&lt;td&gt;timedelta64[ns]&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;8. 시험시간 적절성&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;9-1 체감난이도(출제전반)&lt;/td&gt;&lt;td&gt;uint8&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;9-2 체감난이도(서술)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;9-3 난이도 적절성(Advanced로서)
+&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;10-1 시나리오(실제상황 연관성)&lt;/td&gt;&lt;td&gt;uint8&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;10-2 시나리오 전반의견
+&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;11-1 (과제1) 서술형선택&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;(11-2) (과제1)서술형 선택 이유
+&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;12-1 체감난이도(1번)&lt;/td&gt;&lt;td&gt;float64&lt;/td&gt;&lt;td&gt;4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;12-2 체감난이도(1번)(주관식)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;5&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;12-3 문항 내용적절성(1번)&lt;/td&gt;&lt;td&gt;float64&lt;/td&gt;&lt;td&gt;4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;13-1. 지식이해 암기 중요도 (1번)&lt;/td&gt;&lt;td&gt;float64&lt;/td&gt;&lt;td&gt;4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;13-2. 자료 해석(분석)중요도 (1번)&lt;/td&gt;&lt;td&gt;float64&lt;/td&gt;&lt;td&gt;4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;13-3. 문제 해결력 (1번)&lt;/td&gt;&lt;td&gt;float64&lt;/td&gt;&lt;td&gt;4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;13-4. 전략적 판단력 (1번)&lt;/td&gt;&lt;td&gt;float64&lt;/td&gt;&lt;td&gt;4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;14-1 (시나리오) project 환경_실무유사도 (1번)&lt;/td&gt;&lt;td&gt;float64&lt;/td&gt;&lt;td&gt;4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;14-2 (시나리오) project 환경_실무유사도(주관식) (1번)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;5&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;14-3 (시나리오) project 환경_자료활용도 (1번)&lt;/td&gt;&lt;td&gt;float64&lt;/td&gt;&lt;td&gt;4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;14-4 (시나리오) project 환경_자료활용도(주관식) (1번)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;5&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;15-1 (시나리오) project Architecture_실무유사도 (1번)&lt;/td&gt;&lt;td&gt;float64&lt;/td&gt;&lt;td&gt;4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;15-1 (시나리오) project Architecture_실무유사도(주관식) (1번)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;5&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;15-3 (시나리오) project Architecture_자료활용도 (1번)&lt;/td&gt;&lt;td&gt;float64&lt;/td&gt;&lt;td&gt;4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;15-4 (시나리오) project Architecture_자료활용도(주관식) (1번)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;5&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;16-1 (시나리오) 모듈별성능복잡도데이터_실무유사도 (1번)&lt;/td&gt;&lt;td&gt;float64&lt;/td&gt;&lt;td&gt;4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;16-2 (시나리오) 모듈별성능복잡도데이터_실무유사도(주관식) (1번)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;5&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;16-3 (시나리오) 모듈별성능복잡도데이터_실무유사도 (1번)&lt;/td&gt;&lt;td&gt;float64&lt;/td&gt;&lt;td&gt;4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;15-3 (시나리오) 모듈별성능복잡도데이터_실무유사도(주관식) (1번)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;5&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;17. 과제1 전반적 의견 (1번)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;9&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;12-1 체감난이도(1번).1&lt;/td&gt;&lt;td&gt;float64&lt;/td&gt;&lt;td&gt;12&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;12-2 체감난이도(1번) (주관식)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;12&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;12-3 문항 내용적절성 (2번)&lt;/td&gt;&lt;td&gt;float64&lt;/td&gt;&lt;td&gt;12&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;13-1. 지식이해 암기 중요도 (2번)&lt;/td&gt;&lt;td&gt;float64&lt;/td&gt;&lt;td&gt;12&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;13-2. 자료 해석(분석)중요도 (2번)&lt;/td&gt;&lt;td&gt;float64&lt;/td&gt;&lt;td&gt;12&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;13-3. 문제 해결력 (2번)&lt;/td&gt;&lt;td&gt;float64&lt;/td&gt;&lt;td&gt;12&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;13-4. 전략적 판단력 (2번)&lt;/td&gt;&lt;td&gt;float64&lt;/td&gt;&lt;td&gt;12&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;14-1 (시나리오) project 환경_실무유사도 (2번)&lt;/td&gt;&lt;td&gt;float64&lt;/td&gt;&lt;td&gt;12&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;14-2 (시나리오) project 환경_실무유사도(주관식) (2번)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;12&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;14-3 (시나리오) project 환경_자료활용도 (2번)&lt;/td&gt;&lt;td&gt;float64&lt;/td&gt;&lt;td&gt;12&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;14-4 (시나리오) project 환경_자료활용도(주관식) (2번)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;12&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;15-1 (시나리오) project Architecture_실무유사도 (2번)&lt;/td&gt;&lt;td&gt;float64&lt;/td&gt;&lt;td&gt;12&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;15-2 (시나리오) project Architecture_실무유사도(주관식) (2번)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;12&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;15-3 (시나리오) project Architecture_자료활용도 2번)&lt;/td&gt;&lt;td&gt;float64&lt;/td&gt;&lt;td&gt;12&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;15-4 (시나리오) project Architecture_자료활용도(주관식) (2번)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;12&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;16-1 (시나리오) 모듈별성능복잡도데이터_실무유사도 (2번)&lt;/td&gt;&lt;td&gt;float64&lt;/td&gt;&lt;td&gt;12&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;16-2 (시나리오) 모듈별성능복잡도데이터_실무유사도(주관식) (2번)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;12&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;16-3 (시나리오) 모듈별성능복잡도데이터_실무유사도 (2번)&lt;/td&gt;&lt;td&gt;float64&lt;/td&gt;&lt;td&gt;12&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;16-4 (시나리오) 모듈별성능복잡도데이터_실무유사도(주관식) (2번)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;12&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;17. 과제1 전반적 의견 (2번)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;12&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;18-1. 과제2_하위문항풀이여부&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;18-2. 과제2_하위문항풀이여부(주관식)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;19-1 체감난이도(3번)&lt;/td&gt;&lt;td&gt;uint8&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;19-2 체감난이도(3번) (주관식)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;19-3 문항 내용적절성 (3번)&lt;/td&gt;&lt;td&gt;uint8&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;20-1. 지식이해 암기 중요도 (3번)&lt;/td&gt;&lt;td&gt;uint8&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;20-2. 자료 해석(분석)중요도 (3번)&lt;/td&gt;&lt;td&gt;uint8&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;20-3. 문제 해결력 (3번)&lt;/td&gt;&lt;td&gt;uint8&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;20-4. 전략적 판단력 (3번)&lt;/td&gt;&lt;td&gt;uint8&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;21-1 (시나리오) project 환경_실무유사도 (3번)&lt;/td&gt;&lt;td&gt;uint8&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;21-2 (시나리오) project 환경_실무유사도(주관식) (3번)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;21-3 (시나리오) project 환경_자료활용도 (3번)&lt;/td&gt;&lt;td&gt;uint8&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;21-4 (시나리오) project 환경_자료활용도(주관식) (3번)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;22-1 (시나리오) Automotive SPICE process reference model_실무유사도 (3번)&lt;/td&gt;&lt;td&gt;uint8&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;22-2 (시나리오) Automotive SPICE process reference model_실무유사도(주관식) (3번)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;3&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;22-3 (시나리오) Automotive SPICE process reference model_자료활용도 (3번)&lt;/td&gt;&lt;td&gt;uint8&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;22-4 (시나리오) Automotive SPICE process reference model_자료활용도(주관식) (3번)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;23. 과제2 전반적 의견 (3번)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;5&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;24-1. (Essential과 비교) 체감난이도&lt;/td&gt;&lt;td&gt;uint8&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;24-2. (Essential과 비교) 지식이해/암기&lt;/td&gt;&lt;td&gt;uint8&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;24-3. (Essential과 비교) 자료해석&lt;/td&gt;&lt;td&gt;uint8&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;24-4. (Essential과 비교) 문제해결&lt;/td&gt;&lt;td&gt;uint8&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;24-5. (Essential과 비교) 전략적판단&lt;/td&gt;&lt;td&gt;uint8&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;25-1. 성취수준&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;25-1. 성취수준(주관식)&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;26. 시험관련 하고싶은 말&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;6&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;성함&lt;/td&gt;&lt;td&gt;category&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;사번&lt;/td&gt;&lt;td&gt;uint32&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;
+                &lt;/tbody&gt;
+            &lt;/table&gt;
+        &lt;/section&gt;
+        
+            &lt;section id=&#34;visualizations&#34; class=&#34;section&#34;&gt;
+                &lt;h2&gt;시각화&lt;/h2&gt;
+            
+                &lt;div class=&#34;visualization&#34;&gt;
+                    &lt;h3&gt;결측치 분포&lt;/h3&gt;
+                    &lt;img src=&#34;./output/test_report\viz\missing_data_chart.png&#34; alt=&#34;결측치 분포&#34;&gt;
+                    &lt;p&gt;각 열의 결측치 비율을 보여주는 차트입니다.&lt;/p&gt;
+                &lt;/div&gt;
+                &lt;/section&gt;
+        &lt;section id=&#34;analysis&#34; class=&#34;section&#34;&gt;
+            &lt;h2&gt;분석 결과&lt;/h2&gt;
+        &lt;/section&gt;
+        &lt;section id=&#34;conclusion&#34; class=&#34;section&#34;&gt;
+            &lt;h2&gt;결론&lt;/h2&gt;
+            &lt;p&gt;이 보고서는 제공된 데이터에 대한 기본적인 분석 결과를 제공합니다.&lt;/p&gt;
+            &lt;p&gt;자세한 분석과 해석은 도메인 전문가의 리뷰가 필요합니다.&lt;/p&gt;
+        &lt;/section&gt;
+        
+    </div>
+    
+    <footer class="footer">
+        <p>이 보고서는 엑셀 데이터 분석 시스템에 의해 생성되었습니다.</p>
+        <p>생성일: 2025-04-12 17:49:56</p>
+    </footer>
+</body>
+</html> 
